@@ -35,11 +35,14 @@
 
 #include <TROOT.h>
 #include <TInterpreter.h>
+#include <TMap.h>
 
 #include <mutex>
 #include <sstream>
+#include <initializer_list>
 #include <utility>
 #include <cassert>
+#include <tuple>
 
 static const double PionMass = 0.13956995;
 static const int UNKNOWN_CHARGE = -9999;
@@ -77,7 +80,6 @@ AliFemtoAnalysisPionPion::AnalysisParams::AnalysisParams()
 {
 }
 
-#include <initializer_list>
 
 // typedef Float_t RangeF_t[2];
 typedef std::pair<Float_t, Float_t> RangeF_t;
@@ -221,6 +223,127 @@ static const CutConfig_Pair default_pair;
 const AliFemtoAnalysisPionPion::PionType
   default_PionType = AliFemtoAnalysisPionPion::kNone;
 
+/*
+
+inline bool is_namechar(char c)
+{
+  return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || c == '_';
+}
+
+inline bool is_whitespace(char c)
+{
+  return c == ' ' || c == '\n' || c == '\t';
+}
+
+static void skip_whitespace(std::string::iterator &it, const std::string::iterator stop)
+{
+  while (is_whitespace(*it) && it != stop) {
+    ++it;
+  }
+}
+
+static std::string parse_name(std::string::iterator &it, const std::string::iterator stop)
+{
+  const auto name_start = it;
+  while (is_namechar(*it)) {
+      if (++it == stop)
+        break;
+  }
+  return std::string(name_start, it);
+}
+
+
+static std::pair<TObject, TString> parse_object(std::string::iterator &it, const std::string::iterator stop)
+{
+
+}
+
+
+static std::pair<TList, TString> parse_list(std::string::iterator &it, const std::string::iterator stop)
+{
+
+}
+
+
+static std::tuple<TObjString*, TObject*, TString> parse_map_key_value(std::string::iterator &it, const std::string::iterator stop)
+{
+  TObjString *key = nullptr;
+  TObject *value = nullptr;
+  skip_whitespace(it, stop);
+  if (it == stop) {
+    TString err("Unexpected end of map.");
+    return std::make_tuple(key, value, err);
+  }
+}
+
+
+static std::pair<TMap, TString> parse_map(std::string::iterator &it, const std::string::iterator stop)
+{
+  TMap result, emtpy;
+
+  if (*it != '{') {
+    TString err("Config map does not start wtih '{' character.");
+    return std::make_pair(emtpy.Clone(), err);
+  }
+
+  skip_whitespace(it, stop);
+  if (it == stop) {
+    TString err("Unexpected end of map.");
+    return std::make_pair(emtpy.Clone(), err);
+  }
+
+  TString keyname = parse_name(it, stop);
+
+  if (*it != ':') {
+    TString err("Map missing ':' after key.");
+    return std::make_pair(emtpy.Clone(), err);
+  }
+
+  TString keyname = parse_name(it, stop);
+  skip_whitespace(it, stop);
+  if (it == stop) {
+    TString err("Unexpected end of map.");
+    return std::make_pair(emtpy.Clone(), err);
+  }
+
+  auto value = parse_object(it, stop);
+
+
+}
+
+
+static std::pair<TMap, TString> parse_configuration(const std::string &config)
+{
+  TMap result;
+
+  if (config[0] != '{') {
+    TString err("Configstring does not start wtih '{' character.\n");
+    return std::make_pair(result, err);
+  }
+
+  auto it = std::begin(config),
+       it_end = std::end(config);
+
+  return parse_map(it, it_end);
+}
+*/
+
+
+AliFemtoAnalysisPionPion*
+AliFemtoAnalysisPionPion::BuildFromConfigString(const TString &config)
+{
+  return nullptr;
+  // auto parsed_config = parse_configuration(config.Strip(TString::kBoth));
+
+  // TString parse_err = std::get<1>(parsed_config);
+
+  // if (parse_err) {
+  //   std::cerr << parse_err << "\n";
+  //   return nullptr;
+  // }
+
+  // TMap cfg = std::get<0>(parsed_config);
+}
 
 static const AliFemtoAnalysisPionPion::AnalysisParams
 analysis_params_from_pion_types(AliFemtoAnalysisPionPion::PionType one, AliFemtoAnalysisPionPion::PionType two) {
@@ -229,7 +352,6 @@ analysis_params_from_pion_types(AliFemtoAnalysisPionPion::PionType one, AliFemto
     result.pion_type_2 = two;
     return result;
 }
-
 
 AliFemtoAnalysisPionPion::AliFemtoAnalysisPionPion():
   AliFemtoAnalysisPionPion("AliFemtoAnalysisPionPion")

@@ -75,6 +75,11 @@ public:
                            const AnalysisParams&,
                            const CutParams&);
 
+  /// Build from configuration parameters specified in string; if invalid
+  /// parameters given, errors are printed to stderr and nullptr is returned
+  ///
+  static AliFemtoAnalysisPionPion* BuildFromConfigString(const TString &config);
+
   virtual void EventBegin(const AliFemtoEvent*);
   virtual void EventEnd(const AliFemtoEvent*);
 

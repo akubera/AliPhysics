@@ -133,6 +133,8 @@
 #pragma link C++ class std::vector<AliFemtoConfigObject>::iterator;
 #pragma link C++ class std::vector<std::pair<double, double>>;
 // ^ these std:: classes required here for use in ROOT-5 macros (ROOT-6 should be ok)
+// #pragma link C++ class AliFemtoAnalysisConfig+;
+// #pragma link C++ class AliFemtoAnalysisConfig::Result+;
 
 #pragma link C++ class AliFemtoAnalysisLambdaKaon+;
 #pragma link C++ class AliFemtoAnalysisLambdaKaon::AnalysisParams+;
