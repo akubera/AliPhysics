@@ -1,18 +1,20 @@
 ///
-/// \file AliFemtoCorrFctn.cxx
+/// \file PWGCF/FEMTOSCOPY/AliFemto/AliFemtoCorrFctn.cxx
 ///
 
 #include "AliFemtoCorrFctn.h"
+#include "AliLog.h"
 
 AliFemtoCorrFctn::AliFemtoCorrFctn():
   fyAnalysis(nullptr),
   fPairCut(nullptr)
-{ /* no-op */
+{
+  /* no-op */
 }
 
-AliFemtoCorrFctn::AliFemtoCorrFctn(const AliFemtoCorrFctn& c):
-  fyAnalysis(c.fyAnalysis),
-  fPairCut(c.fPairCut)
+AliFemtoCorrFctn::AliFemtoCorrFctn(const AliFemtoCorrFctn& orig):
+  fyAnalysis(nullptr),
+  fPairCut(nullptr)
 {
 }
 
@@ -22,31 +24,34 @@ AliFemtoCorrFctn& AliFemtoCorrFctn::operator=(const AliFemtoCorrFctn& aCorrFctn)
     fyAnalysis = aCorrFctn.fyAnalysis;
     fPairCut = aCorrFctn.fPairCut;
   }
+
   return *this;
 }
 
 void AliFemtoCorrFctn::AddRealPair(AliFemtoPair*)
 {
-  cout << "Not implemented" << endl;
+  cout << "[AliFemtoCorrFctn::AddRealPair] Not implemented" << endl;
 }
+
 void AliFemtoCorrFctn::AddMixedPair(AliFemtoPair*)
 {
-  cout << "Not implemented" << endl;
+  cout << "[AliFemtoCorrFctn::AddMixedPair] Not implemented" << endl;
 }
 
 void AliFemtoCorrFctn::AddFirstParticle(AliFemtoParticle*, bool)
 {
-  cout << "Not implemented" << endl;
-}
-void AliFemtoCorrFctn::AddSecondParticle(AliFemtoParticle*)
-{
-  cout << "Not implemented" << endl;
-}
-void AliFemtoCorrFctn::CalculateAnglesForEvent()
-{
-  cout << "Not implemented" << endl;
+  cout << "[AliFemtoCorrFctn::AddFirstParticle] Not implemented" << endl;
 }
 
+void AliFemtoCorrFctn::AddSecondParticle(AliFemtoParticle*)
+{
+  cout << "[AliFemtoCorrFctn::AddSecondParticle] Not implemented" << endl;
+}
+
+void AliFemtoCorrFctn::CalculateAnglesForEvent()
+{
+  cout << "[AliFemtoCorrFctn::CalculateAnglesForEvent] Not implemented" << endl;
+}
 
 
 #ifdef __ROOT__
