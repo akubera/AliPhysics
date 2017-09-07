@@ -100,7 +100,6 @@ set(SRCS
   AliFemtoAnalysisAzimuthalPbPb2Order.cxx
   AliFemtoAnalysisPionLambda.cxx
   AliFemtoAnalysisPionPion.cxx
-  AliFemtoAnalysisConfig.cxx
   AliFemtoPairCutRadialDistanceLM.cxx
   AliFemtoPicoEventRP.cxx
   AliFemtoPairCutRadialDistanceKK.cxx
