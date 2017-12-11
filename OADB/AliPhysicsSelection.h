@@ -88,10 +88,10 @@ public:
   void SetUseBXNumbers(Bool_t flag = kTRUE) {fUseBXNumbers = flag;}
   void SetCustomOADBObjects(AliOADBPhysicsSelection * oadbPS, AliOADBFillingScheme * oadbFS, AliOADBTriggerAnalysis * oadbTA = 0) { fPSOADB = oadbPS; fFillOADB = oadbFS; fTriggerOADB = oadbTA; fUsingCustomClasses = kTRUE;}
   
-  virtual TObject *GetStatistics(const Option_t *option) const { return fHistList.FindObject("fHistStat"); }
-  void SetBin0Callback( const char * cb) { AliError("This method is deprecated"); } 
-  void SetBin0CallbackViaPointer( Bin0Callback_t cb) { AliError("This method is deprecated"); }
-  void SetSkipTriggerClassSelection(Bool_t flag = kTRUE) { AliError("This method is deprecated"); }
+  virtual TObject *GetStatistics(const Option_t *) const { return fHistList.FindObject("fHistStat"); }
+  void SetBin0Callback( const char * ) { AliError("This method is deprecated"); }
+  void SetBin0CallbackViaPointer( Bin0Callback_t ) { AliError("This method is deprecated"); }
+  void SetSkipTriggerClassSelection(Bool_t /* flag */ = kTRUE) { AliError("This method is deprecated"); }
   
   static const char * GetOADBFileName() { static TString filename; filename.Form("%s/COMMON/PHYSICSSELECTION/data/physicsSelection.root", AliAnalysisManager::GetOADBPath()); return filename.Data();};
 
@@ -99,6 +99,7 @@ public:
   void DetectPassName();
   void ReadOCDB(Bool_t val) { fReadOCDB=val; }
   Bool_t IsMC() const { return fMC; }
+
 protected:
   UInt_t CheckTriggerClass(const AliVEvent* event, const char* trigger, Int_t& triggerLogic) const;
   Bool_t EvaluateTriggerLogic(const AliVEvent* event, AliTriggerAnalysis* triggerAnalysis, const char* triggerLogic, Bool_t offline);
