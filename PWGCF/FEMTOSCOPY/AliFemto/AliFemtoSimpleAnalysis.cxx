@@ -798,48 +798,26 @@ TList* AliFemtoSimpleAnalysis::GetOutputList()
 
   TList *tOutputList = new TList();
 
-  TList *p1Cut = fFirstParticleCut->GetOutputList();
+  // Function (closure) used to add items into output list
+  auto add_output_list = [&](auto *container) {
+    TList *olist = container->GetOutputList();
+    TListIter iter(olist);
+    while (TObject *obj = iter.Next()) {
+      tOutputList->Add(obj);
+    }
+    delete olist;
+  };
 
-  TListIter nextp1(p1Cut);
-  while (TObject *obj = nextp1.Next()) {
-    tOutputList->Add(obj);
-  }
-  delete p1Cut;
+  add_output_list(fFirstParticleCut);
 
   if (fSecondParticleCut != fFirstParticleCut) {
-    TList *p2Cut = fSecondParticleCut->GetOutputList();
-
-    TIter nextp2(p2Cut);
-    while (TObject *obj = nextp2()) {
-      tOutputList->Add(obj);
-    }
-    delete p2Cut;
+    add_output_list(fSecondParticleCut);
   }
 
-  TList *pairCut = fPairCut->GetOutputList();
-
-  TIter nextpair(pairCut);
-  while (TObject *obj = nextpair()) {
-    tOutputList->Add(obj);
-  }
-  delete pairCut;
-
-  TList *eventCut = fEventCut->GetOutputList();
-
-  TIter nextevent(eventCut);
-  while (TObject *obj = nextevent()) {
-    tOutputList->Add(obj);
-  }
-  delete eventCut;
-
+  add_output_list(fPairCut);
+  add_output_list(fEventCut);
   for (auto &cf : *fCorrFctnCollection) {
-    TList *tListCf = cf->GetOutputList();
-
-    TIter nextListCf(tListCf);
-    while (TObject *obj = nextListCf()) {
-      tOutputList->Add(obj);
-    }
-    delete tListCf;
+    add_output_list(cf);
   }
 
   return tOutputList;
