@@ -47,33 +47,55 @@
 #include <stdio.h>
 #include <typeinfo>
 
-
+/// \class AliFemtoAnalysisLambdaKaon
+/// \brief A complete femtoscopic analysis between lambdas & kaons,
+///        plus auxilary systems
+///
+/// \author Jesse Buxton, The Ohio State University
+///
 class AliFemtoAnalysisLambdaKaon : public AliFemtoVertexMultAnalysis {
-
 public:
-  enum AnalysisType {kLamK0=0, kALamK0=1, 
-                     kLamKchP=2, kALamKchP=3, kLamKchM=4, kALamKchM=5, 
-                     kLamLam=6, kALamALam=7, kLamALam=8, 
-                     kLamPiP=9, kALamPiP=10, kLamPiM=11, kALamPiM=12, 
-                     kXiKchP=13, kAXiKchP=14, kXiKchM=15, kAXiKchM=16,
-                     kXiK0=17, kAXiK0=18,
-                     kProtPiM=19, kAProtPiP=20, kPiPPiM=21};
+  /// All possible Paritcle pair types
+  enum AnalysisType {
+    kLamK0   = 0,  kALamK0   = 1,
+    kLamKchP = 2,  kALamKchP = 3,  kLamKchM = 4, kALamKchM = 5,
+    kLamLam  = 6,  kALamALam = 7,  kLamALam = 8,
+    kLamPiP  = 9,  kALamPiP  = 10, kLamPiM  = 11, kALamPiM = 12,
+    kXiKchP  = 13, kAXiKchP  = 14, kXiKchM  = 15, kAXiKchM = 16,
+    kXiK0    = 17, kAXiK0    = 18,
+    kProtPiM = 19, kAProtPiP = 20, kPiPPiM  = 21,
+  };
 
-  enum GeneralAnalysisType {kV0V0=0, kV0Track=1, kXiTrack=2, kXiV0=3, kTrackTrack=4};
+  enum GeneralAnalysisType {
+    kV0V0=0,
+    kV0Track=1,
+    kXiTrack=2,
+    kXiV0=3,
+    kTrackTrack=4,
+  };
 
-  enum ParticlePDGType {kPDGProt   = 2212,  kPDGAntiProt = -2212, 
-		        kPDGPiP    = 211,   kPDGPiM      = -211, 
-                        kPDGK0     = 310,
-                        kPDGKchP   = 321,   kPDGKchM     = -321,
-		        kPDGLam    = 3122,  kPDGALam     = -3122,
-		        kPDGSigma  = 3212,  kPDGASigma   = -3212,
-		        kPDGXiC    = 3312,  kPDGAXiC     = -3312,
-		        kPDGXi0    = 3322,  kPDGAXi0     = -3322,
-		        kPDGOmega  = 3334,  kPDGAOmega   = -3334,
-                        kPDGNull      = 0                        };
+  enum ParticlePDGType {
+    kPDGProt   = 2212, kPDGAntiProt = -2212,
+    kPDGPiP    = 211,  kPDGPiM      = -211,
+    kPDGK0     = 310,  kPDGKchP     = 321,  kPDGKchM     = -321,
+    kPDGLam    = 3122, kPDGALam     = -3122,
+    kPDGSigma  = 3212, kPDGASigma   = -3212,
+    kPDGXiC    = 3312, kPDGAXiC     = -3312,
+    kPDGXi0    = 3322, kPDGAXi0     = -3322,
+    kPDGOmega  = 3334, kPDGAOmega   = -3334,
 
-  enum GeneralParticleType {kV0=0, kTrack=1, kCascade=2};
+    kPDGNull   = 0 // Keep Me Last!
+  };
 
+  /// These represent particle classification
+  enum GeneralParticleType {
+    kV0=0,
+    kTrack=1,
+    kCascade=2,
+  };
+
+/// \class AliFemtoAnalysisLambdaKaon::AnalysisParams
+/// \brief Explicit parameters used to build the AliFemtoAnalysisLambdaKaon
 struct AnalysisParams
 {
   unsigned int nBinsVertex;
@@ -81,7 +103,7 @@ struct AnalysisParams
          maxVertex;
 
   unsigned int nBinsMult;
-  double minMult, 
+  double minMult,
          maxMult;
 
   bool binEventsInRP;  //bin events in reaction plane angle (in addition to vertex z-position and multiplicity)
@@ -317,14 +339,14 @@ struct PairCutParams
   AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, XiCutParams &aXiCutParams1, V0CutParams &aV0CutParams1, TString aDirNameModifier="");
   AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, ESDCutParams &aESDCutParams1, ESDCutParams &aESDCutParams2, TString aDirNameModifier="");
 
-    //Since I am using rdr->SetUseMultiplicity(AliFemtoEventReaderAOD::kCentrality), 
+    //Since I am using rdr->SetUseMultiplicity(AliFemtoEventReaderAOD::kCentrality),
       // in AliFemtoEventReaderAOD.cxx this causes tEvent->SetNormalizedMult(lrint(10*cent->GetCentralityPercentile("V0A"))), i.e. fNormalizedMult in [0,1000]
       // Therefore, since fNormalizedMult is presumably >= -1, in AliFemtoEvent.cxx the call UncorrectedNumberOfPrimaries returns fNormalizedMult
     //LONG STORY SHORT:  the inputs for multiplicity in the above are actually for 10*centrality (i.e. 0-100 for 0-10% centrality)
     //Note:  fNormalizedMult is typically in range [0,1000] (as can be seen in AliFemtoEventReaderAOD.cxx).  This appears true when SetUseMultiplicity is set to kCentrality, kCentralityV0A, kCentralityV0C, kCentralityZNA, kCentralityZNC, kCentralityCL1, kCentralityCL0, kCentralityTRK, kCentralityTKL, kCentralityCND, kCentralityNPA, kCentralityFMD.
-      // fNormalizedMult WILL NOT be [0,1000] when SetUseMultiplicity is set to kGlobalCount, kReference, kTPCOnlyRef, and kVZERO 
+      // fNormalizedMult WILL NOT be [0,1000] when SetUseMultiplicity is set to kGlobalCount, kReference, kTPCOnlyRef, and kVZERO
 
-  
+
   AliFemtoAnalysisLambdaKaon(const AliFemtoAnalysisLambdaKaon& TheOriginalAnalysis);
   AliFemtoAnalysisLambdaKaon& operator=(const AliFemtoAnalysisLambdaKaon& TheOriginalAnalysis);
   virtual ~AliFemtoAnalysisLambdaKaon();
