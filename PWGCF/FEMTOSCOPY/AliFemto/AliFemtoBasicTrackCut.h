@@ -1,6 +1,12 @@
 ///
-/// \file AliFemtoBasicTrackCut.h
+/// \file AliFemto/AliFemtoBasicTrackCut.h
 ///
+
+#ifndef ALIFEMTOBASICTRACKCUT_H
+#define ALIFEMTOBASICTRACKCUT_H
+
+#include "AliFemtoTrackCut.h"
+
 /// \class AliFemtoBasicTrackCut
 /// \brief The basic cut for tracks.
 ///
@@ -21,12 +27,6 @@
 ///
 /// Charge defaults to 1 (positive)
 ///
-
-#ifndef ALIFEMTOBASICTRACKCUT_H
-#define ALIFEMTOBASICTRACKCUT_H
-
-#include "AliFemtoTrackCut.h"
-
 class AliFemtoBasicTrackCut : public AliFemtoTrackCut {
 public:
 

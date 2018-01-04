@@ -1,5 +1,5 @@
 ///
-/// \file AliFemtoBasicTrackCut.cxx
+/// \file AliFemto/AliFemtoBasicTrackCut.cxx
 ///
 
 #include "AliFemtoBasicTrackCut.h"
