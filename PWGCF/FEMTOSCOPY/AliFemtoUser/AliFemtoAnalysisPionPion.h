@@ -17,6 +17,15 @@ class TList;
 #include "AliFemtoEventReaderAODMultSelection.h"
 
 
+namespace femtopionpion {
+
+AliFemtoAnalysis*
+construct_analysis_from_config(AliFemtoConfigObject);
+
+} // namespace femtopionpion
+
+
+
 /// \class AliFemtoAnalysisPionPion
 /// \brief A simple analysis for studying femtoscopic systems of
 ///        charged pions
