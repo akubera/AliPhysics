@@ -14,7 +14,6 @@
 
 #include "AliFmThreeVectorD.h"
 
-
 /// \class AliFmHelix
 /// \brief A helper helix class
 ///
