@@ -929,6 +929,7 @@ AliFemtoAnalysisPionPion::BuildAnalysisFromConfiguration(AliFemtoConfigObject cf
 
   return result;
 }
+<<<<<<< HEAD
 
 AliFemtoCorrFctn*
 AliFemtoAnalysisPionPion::ConstructCorrelationFunction(AliFemtoConfigObject cfg)
@@ -952,3 +953,5 @@ AliFemtoAnalysisPionPion::ConstructCorrelationFunction(AliFemtoConfigObject cfg)
 
   return result;
 }
+=======
+>>>>>>> PionPion - More stuff
