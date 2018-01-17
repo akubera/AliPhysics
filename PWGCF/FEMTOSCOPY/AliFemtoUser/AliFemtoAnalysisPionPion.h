@@ -16,13 +16,15 @@ class TList;
 #include "AliFemtoVertexMultAnalysis.h"
 #include "AliFemtoEventReaderAODMultSelection.h"
 
+AliFemtoAnalysis*
 
-namespace femtopionpion {
+// namespace femtopionpion {
+construct_analysis_from_config(const char *cfg_str);
 
 AliFemtoAnalysis*
 construct_analysis_from_config(AliFemtoConfigObject);
 
-} // namespace femtopionpion
+// } // namespace femtopionpion
 
 
 

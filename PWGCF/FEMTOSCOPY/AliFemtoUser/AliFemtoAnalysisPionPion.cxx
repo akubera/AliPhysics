@@ -33,6 +33,8 @@
 
 #include "AliFemtoAnalysisPionPionObjectConstructor.h"
 
+#include <AliFemtoEventReaderAODMultSelection.h>
+
 #include <TROOT.h>
 #include <TInterpreter.h>
 
@@ -929,7 +931,6 @@ AliFemtoAnalysisPionPion::BuildAnalysisFromConfiguration(AliFemtoConfigObject cf
 
   return result;
 }
-<<<<<<< HEAD
 
 AliFemtoCorrFctn*
 AliFemtoAnalysisPionPion::ConstructCorrelationFunction(AliFemtoConfigObject cfg)
@@ -953,5 +954,3 @@ AliFemtoAnalysisPionPion::ConstructCorrelationFunction(AliFemtoConfigObject cfg)
 
   return result;
 }
-=======
->>>>>>> PionPion - More stuff

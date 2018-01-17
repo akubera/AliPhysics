@@ -139,3 +139,8 @@
 
 #pragma link C++ class AliFemtoPairCutRadialDistanceKKdist;
 
+// #pragma link C++ function AliFemtoAnalysis* femtopionpion::construct_analysis_from_config(AliFemtoConfigObject);
+#pragma link C++ function construct_analysis_from_config;
+
+//(AliFemtoConfigObject);
+// construct_analysis_from_config
