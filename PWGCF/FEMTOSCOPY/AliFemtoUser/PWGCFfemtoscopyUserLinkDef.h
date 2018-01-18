@@ -123,6 +123,10 @@
 #pragma link C++ class AliFemtoModelWeightGeneratorBasicLednicky+;
 #pragma link C++ class AliFemtoModelCorrFctnDEtaDPhiRM;
 
+#pragma link C++ namespace femtopionpion;
+#pragma link C++ function femtopionpion::BuildThing<AliFemtoConfigObject>;
+#pragma link C++ class AliFemtoAnalysisPionPion::Constructa<float>;
+
 #pragma link C++ class AliFemtoAnalysisLambdaKaon+;
 #pragma link C++ class AliFemtoAnalysisLambdaKaon::AnalysisParams+;
 #pragma link C++ class AliFemtoAnalysisLambdaKaon::EventCutParams+;

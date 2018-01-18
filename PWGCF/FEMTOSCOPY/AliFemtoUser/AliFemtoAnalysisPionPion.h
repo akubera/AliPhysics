@@ -54,6 +54,22 @@ public:
   struct CutParams;
   struct AnalysisParams;
 
+
+  template <typename T>
+  struct Constructa {
+    void* operator()() {
+      return nullptr;
+    }
+  };
+
+  template <typename T>
+  static void* Construct();
+
+  static void* ConstructInt()
+  {
+    return Construct<int>();
+  }
+
 public:
   /// default constructor
   AliFemtoAnalysisPionPion();
