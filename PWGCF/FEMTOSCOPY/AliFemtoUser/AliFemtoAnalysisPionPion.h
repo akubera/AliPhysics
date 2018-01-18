@@ -16,15 +16,80 @@ class TList;
 #include "AliFemtoVertexMultAnalysis.h"
 #include "AliFemtoEventReaderAODMultSelection.h"
 
-AliFemtoAnalysis*
+#include "AliFemtoEventReaderAODMultSelection.h"
 
-// namespace femtopionpion {
+namespace femtopionpion {
+
+  ///
+  struct Constructor {
+    virtual ~Constructor(){};
+    virtual void* New(AliFemtoConfigObject) = 0;
+
+    static void* Build(AliFemtoConfigObject cfg);
+
+
+
+  };
+
+    template<typename T>
+    struct ConstructorT : Constructor {
+      virtual void* New(AliFemtoConfigObject cfg)
+      {
+        std::cout << "Building a new Object!!\n";
+        T* result = new T();
+        return (void*)result;
+      }
+    };
+
+    template<>
+    struct ConstructorT<AliFemtoEventReaderAODMultSelection> : Constructor {
+      virtual void* New(AliFemtoConfigObject cfg)
+      {
+        std::cout << "Building a new AOD-MultSelector!!\n";
+        std::cout << "--- cfg ---\n" << cfg.Stringify() << "\n ---\n";
+        auto result = new AliFemtoEventReaderAODMultSelection();
+
+        return result;
+      }
+    };
+
+    // void*
+// Constructor::ConstructorT::New(AliFemtoConfigObject cfg)
+// {
+// }
+
+
+  // template <typename T>
+  // struct Constructor::ConstructorT : public Constructor {
+
+  //   virtual void* New(AliFemtoConfigObject cfg)
+  //   {
+  //     return new T(cfg);
+  //   }
+
+  // };
+
+    // typedef ConstructorT<AliFemtoEventReaderAODMultSelection> BBBB;
+
+
+  // template<>
+  // struct ConstructorT<AliFemtoEventReaderAODMultSelection> : Constructor
+  // {
+  //   virtual void* New(AliFemtoConfigObject cfg);
+  // };
+
+  /// Typed constructor - i.e. used tot ype
+  // template <typename T>
+  // struct ConstructorT;
+
+
+} // namespace femtopionpion
+
+AliFemtoAnalysis*
 construct_analysis_from_config(const char *cfg_str);
 
 AliFemtoAnalysis*
 construct_analysis_from_config(AliFemtoConfigObject);
-
-// } // namespace femtopionpion
 
 
 

@@ -125,7 +125,12 @@
 
 #pragma link C++ namespace femtopionpion;
 #pragma link C++ function femtopionpion::BuildThing<AliFemtoConfigObject>;
-#pragma link C++ class AliFemtoAnalysisPionPion::Constructa<float>;
+#pragma link C++ class femtopionpion::Constructor;
+#pragma link C++ class femtopionpion::ConstructorT<AliFemtoEventReaderAODMultSelection>;
+#pragma link C++ class femtopionpion::ConstructorT<AliFemtoEventReaderAOD>;
+
+// #pragma link C++ class AliFemtoAnalysisPionPion::Constructa<float>;
+// #pragma link C++ class ConstructorT;
 
 #pragma link C++ class AliFemtoAnalysisLambdaKaon+;
 #pragma link C++ class AliFemtoAnalysisLambdaKaon::AnalysisParams+;
