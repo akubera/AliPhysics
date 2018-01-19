@@ -33,7 +33,7 @@
 
 #include "AliFemtoAnalysisPionPionObjectConstructor.h"
 
-#include <AliFemtoEventReaderAODMultSelection.h>
+#include "AliFemtoAnalysisPionPionObjectConstructor.h"
 
 #include <TROOT.h>
 #include <TInterpreter.h>
