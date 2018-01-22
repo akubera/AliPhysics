@@ -34,6 +34,43 @@
 template <typename T>
 struct Configuration;
 
+template <typename T>
+struct AbstractConfiguration {
+  virtual operator T*() const = 0;
+};
+
+#endif
+
+#if defined(ALIFEMTOEVENTREADERAOD_H) && !defined(ALIFEMTOCONSTRUCTOR_ALIFEMTOEVENTREADERAOD_H)
+#define ALIFEMTOCONSTRUCTOR_ALIFEMTOEVENTREADERAOD_H
+
+template <>
+struct Configuration<AliFemtoEventReaderAOD> : AbstractConfiguration<AliFemtoEventReader> {
+  int filter_bit { 7 };
+
+  Configuration(AliFemtoConfigObject &cfg)
+  {
+    cfg.pop_and_load("filter_bit", filter_bit);
+  }
+
+  void Configure(AliFemtoEventReaderAOD &obj) const
+  {
+    obj.SetFilterBit(filter_bit);
+  }
+
+  virtual operator AliFemtoEventReader*() const {
+    AliFemtoEventReaderAOD *rdr = new AliFemtoEventReaderAOD();
+    Configure(*rdr);
+    return rdr;
+  }
+
+};
+
+#endif
+
+
+#if defined(ALIFEMTOEVENTREADERAOD_H) && !defined(ALIFEMTOCONSTRUCTOR_ALIFEMTOEVENTREADERAOD_H)
+#define ALIFEMTOCONSTRUCTOR_ALIFEMTOEVENTREADERAOD_H
 
 /// Specific case of a Configuration class; one that wraps an abstract-
 /// base-class used by the others for specifying possible pointer
@@ -132,6 +169,33 @@ struct Configuration<AliFemtoEventReaderAOD> : AbstractConfiguration<AliFemtoEve
 };
 #endif
 
+#endif
+
+#if defined(ALIFEMTOEVENTREADERAODCHAIN_H) && !defined(ALIFEMTOCONSTRUCTOR_ALIFEMTOEVENTREADERAODCHAIN_H)
+#define ALIFEMTOCONSTRUCTOR_ALIFEMTOEVENTREADERAODCHAIN_H
+
+template <>
+struct Configuration<AliFemtoEventReaderAODChain> : Configuration<AliFemtoEventReaderAOD> {
+
+  Configuration(AliFemtoConfigObject &cfg):
+    Configuration<AliFemtoEventReaderAOD>(cfg)
+  {}
+
+  void Configure(AliFemtoEventReaderAODChain &obj) const
+  {
+    Configuration<AliFemtoEventReaderAOD>::Configure(obj);
+  }
+
+  virtual operator AliFemtoEventReader*() const
+  {
+    auto *rdr = new AliFemtoEventReaderAODChain();
+    Configure(*rdr);
+    return rdr;
+  }
+
+
+};
+
 
 #if defined(ALIFEMTOEVENTREADERAODCHAIN_H) && !defined(ALIFEMTOCONSTRUCTOR_ALIFEMTOEVENTREADERAODCHAIN_H)
 #define ALIFEMTOCONSTRUCTOR_ALIFEMTOEVENTREADERAODCHAIN_H
@@ -160,6 +224,11 @@ struct Configuration<AliFemtoEventReaderAODChain> : Configuration<AliFemtoEventR
 
 #if defined(ALIFEMTOEVENTREADER_MULTSELECTION_H_) && !defined(ALIFEMTOCONSTRUCTOR_ALIFEMTOEVENTREADER_MULTSELECTION_H_)
 #define ALIFEMTOCONSTRUCTOR_ALIFEMTOEVENTREADER_MULTSELECTION_H_
+
+/// Construct Configuration
+/// AliFemtoEventReaderAODMultSelection
+///
+///
 template <>
 struct Configuration<AliFemtoEventReaderAODMultSelection> : Configuration<AliFemtoEventReaderAODChain> {
   AliFemtoEventReaderAOD::EstEventMult multiplicity { AliFemtoEventReaderAOD::kCentrality };
@@ -663,6 +732,95 @@ struct Configuration<AliFemtoModelCorrFctnDEtaDPhiStar> : AbstractConfiguration<
 };
 #endif
 
+  std::pair<int, int> multiplicity = {0, 1000000};
+  RangeF_t centrality = {0, 90},
+           vertex_z = {-10.0f, 10.0f},
+           EP_VZero = {-1000.0, 1000.0};
+
+  Int_t trigger_selection = 0;
+    Bool_t accept_bad_vertex = false;
+    Bool_t accept_only_physics = true;
+
+    UInt_t min_coll_size = 10;
+
+    /// default constructor required to use default initialized members
+    Configuration(){};
+
+    /// Templated member for constructing AliFemtoEventCut objects from
+    /// these parameters.
+    template <typename EventCutType>
+    EventCutType* ConstructCut() const;
+
+    /// Build from config object
+    Configuration(AliFemtoConfigObject obj) {
+
+      obj.pop_all()
+        ("multiplicity", multiplicity)
+        ("centrality", centrality)
+        ("vertex_z", vertex_z)
+        ("ep_v0", EP_VZero)
+        ("trigger", trigger_selection)
+        ("accept_bad_vertex", accept_bad_vertex)
+        ("accept_only_physics", accept_only_physics)
+        ("min_collection_size", min_coll_size)
+        .WarnOfRemainingItems();
+    }
+
+    /// Construct a config object with this object's properties
+    operator AliFemtoConfigObject() const {
+        return AliFemtoConfigObject::BuildMap()
+          ("multiplicity", multiplicity)
+          ("centrality", centrality)
+          ("vertex_z", vertex_z)
+          ("ep_v0", EP_VZero)
+          ("trigger", trigger_selection)
+          ("accept_bad_vertex", accept_bad_vertex)
+          ("accept_only_physics", accept_only_physics)
+          ("min_collection_size", min_coll_size);
+    }
+};
+#endif
+
+#if defined(ALIFEMTOFBLKSBUJ)
+template<>
+struct Configuration<AliFemtoEventCutCentrality> {
+
+};
+#endif
+
+
+#if defined(ALIFEMTOPARTICLECUT_H) && !defined(ALIFEMTOCONSTRUCTOR_ALIFEMTOPARTICLECUT_H)
+#define ALIFEMTOCONSTRUCTOR_ALIFEMTOPARTICLECUT_H
+
+template<>
+struct Configuration<AliFemtoParticleCut>
+{
+  Double_t mass;
+};
+
+#endif
+
+
+#if defined(ALIFEMTOESDTRACKCUT_H) && !defined(ALIFEMTOCONSTRUCTOR_ALIFEMTOESDTRACKCUT_H)
+#define ALIFEMTOCONSTRUCTOR_ALIFEMTOESDTRACKCUT_H
+
+template<>
+struct Configuration<AliFemtoESDTrackCut> : Configuration<AliFemtoParticleCut>
+{
+  using RangeF_t = std::pair<float, float>;
+  RangeF_t pt = {0.2, 2.0},
+            eta = {-0.8, 0.8},
+            DCA = {0.5, 4.0},
+            nSigma = {-3.0, 3.0};
+
+  Int_t charge = 1,
+        min_tpc_ncls = 80;
+
+  Float_t max_impact_xy = 2.4,
+          max_impact_z = 3.0,
+          max_tpc_chi_ndof = 0.032,
+          max_its_chi_ndof = 0.032;
+};
 
 #if defined(ALIFEMTOCORRFCTN3DLCMS_H) && !defined(ALIFEMTOCONSTRUCTOR_ALIFEMTOCORRFCTN3DLCMS_H)
 #define ALIFEMTOCONSTRUCTOR_ALIFEMTOCORRFCTN3DLCMS_H

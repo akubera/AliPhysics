@@ -20,38 +20,59 @@ class TList;
 
 namespace femtopionpion {
 
+  /// Structure for building objects from an AliFemtoConfigObject
+  ///
+  /// This is the abstract-base-class for concrete implementations that
+  /// "know" the type of object they are creating.
+  /// The constructor is actually a "functor"  this simply provies the virtual
+  /// "New" method that will be bases
   ///
   struct Constructor {
+    /// Empty destructor
     virtual ~Constructor(){};
+
+    /// Builds a new object of undetermined type - this needs to be
+    /// handled by a subclass.
     virtual void* New(AliFemtoConfigObject) = 0;
 
+    /// static method
     static void* Build(AliFemtoConfigObject cfg);
-
-
-
   };
 
-    template<typename T>
-    struct ConstructorT : Constructor {
-      virtual void* New(AliFemtoConfigObject cfg)
-      {
-        std::cout << "Building a new Object!!\n";
-        T* result = new T();
-        return (void*)result;
-      }
-    };
+  /// Typed Constructor
+  template<typename T>
+  struct ConstructorT : Constructor {
+    virtual void* New(AliFemtoConfigObject cfg)
+    {
+      std::cout << "Building a new Object!!\n";
+      T* result = new T();
+      return (void*)result;
+    }
+  };
 
-    template<>
-    struct ConstructorT<AliFemtoEventReaderAODMultSelection> : Constructor {
-      virtual void* New(AliFemtoConfigObject cfg)
-      {
-        std::cout << "Building a new AOD-MultSelector!!\n";
-        std::cout << "--- cfg ---\n" << cfg.Stringify() << "\n ---\n";
-        auto result = new AliFemtoEventReaderAODMultSelection();
+  template<>
+  struct ConstructorT<AliFemtoEventReaderAODMultSelection> : Constructor {
+    virtual void* New(AliFemtoConfigObject cfg)
+    {
+      std::cout << "Building a new AOD-MultSelector!!\n";
+      std::cout << "--- cfg ---\n" << cfg.Stringify() << "\n ---\n";
+      auto result = new AliFemtoEventReaderAODMultSelection();
 
-        return result;
-      }
-    };
+      return result;
+    }
+  };
+
+  // template<>
+  // struct ConstructorT<AliFemtoEventReaderAODMultSelection> : Constructor {
+  //   virtual void* New(AliFemtoConfigObject cfg)
+  //   {
+  //     std::cout << "Building a new AOD-MultSelector!!\n";
+  //     std::cout << "--- cfg ---\n" << cfg.Stringify() << "\n ---\n";
+  //     auto result = new AliFemtoEventReaderAODMultSelection();
+
+  //     return result;
+  //   }
+  // };
 
 // void*
 // Constructor::ConstructorT::New(AliFemtoConfigObject cfg)
@@ -118,7 +139,6 @@ public:
 
   struct CutParams;
   struct AnalysisParams;
-
 
   template <typename T>
   struct Constructa {
@@ -205,7 +225,6 @@ public:
   /// should be changed eventually)
   ///
   static AliFemtoAnalysis* BuildAnalysisFromConfiguration(AliFemtoConfigObject);
-
 
   /// Construct an Event Reader from config object
   ///

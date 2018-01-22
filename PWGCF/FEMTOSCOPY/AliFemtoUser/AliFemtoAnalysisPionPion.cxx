@@ -33,8 +33,6 @@
 
 #include "AliFemtoAnalysisPionPionObjectConstructor.h"
 
-#include "AliFemtoAnalysisPionPionObjectConstructor.h"
-
 #include <TROOT.h>
 #include <TInterpreter.h>
 
