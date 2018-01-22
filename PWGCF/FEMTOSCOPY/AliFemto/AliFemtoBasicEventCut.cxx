@@ -11,6 +11,16 @@
   /// \endcond
 #endif
 
+AliFemtoBasicEventCut::Configuration::Configuration()
+  : mult_range(0, 100000)
+  , vertex_z_range(-100.0f, 100.0f)
+  , psi_ep_range(-1000.0f, 1000.0f)
+  , select_trigger(0)
+  , accept_bad_vertex(false)
+  , accept_only_physics(true)
+{
+}
+
 AliFemtoBasicEventCut::AliFemtoBasicEventCut():
   AliFemtoEventCut(),
   fEventMult(),
@@ -29,6 +39,22 @@ AliFemtoBasicEventCut::AliFemtoBasicEventCut():
   fPsiEP[0] = -1000.0;
   fPsiEP[1] = 1000.0;
 }
+
+AliFemtoBasicEventCut::AliFemtoBasicEventCut(const AliFemtoBasicEventCut::Configuration& cfg):
+  AliFemtoEventCut()
+  // , fEventMult({cfg.mult_range.first, cfg.mult_range.second})
+  // , fVertZPos({cfg.vertex_z_range.first, cfg.vertex_z_range.second})
+  , fAcceptBadVertex(cfg.accept_bad_vertex)
+  , fNEventsPassed(0)
+  , fNEventsFailed(0)
+  , fAcceptOnlyPhysics(cfg.accept_only_physics)
+  , fSelectTrigger(cfg.select_trigger)
+{
+  fEventMult[0] = cfg.mult_range.first;
+  fEventMult[1] = cfg.mult_range.second;
+}
+
+
 //------------------------------
 AliFemtoBasicEventCut::~AliFemtoBasicEventCut()
 { // Default destructor

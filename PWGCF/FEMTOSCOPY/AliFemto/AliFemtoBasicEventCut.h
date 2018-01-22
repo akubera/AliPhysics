@@ -14,9 +14,23 @@
 ///
 class AliFemtoBasicEventCut : public AliFemtoEventCut {
 public:
+  /// \class AliFemtoBasicEventCut::Configuration
+  /// \brief Simple structure holding data parameters
+  struct Configuration {
+
+    std::pair<int, int> mult_range;
+    std::pair<float, float> vertex_z_range;
+    std::pair<float, float> psi_ep_range;
+    int select_trigger;
+    bool accept_bad_vertex;
+    bool accept_only_physics;
+
+    Configuration();
+  };
 
   AliFemtoBasicEventCut(); ///< Default Constructor
   AliFemtoBasicEventCut(const AliFemtoBasicEventCut& c);  ///< Copy Constructor
+  AliFemtoBasicEventCut(const Configuration &); ///< Configuration-Constructor
   virtual ~AliFemtoBasicEventCut(); ///< Destructor
   AliFemtoBasicEventCut& operator=(const AliFemtoBasicEventCut& c);  ///< Assignment Operator
 
@@ -100,7 +114,6 @@ inline AliFemtoBasicEventCut::AliFemtoBasicEventCut(const AliFemtoBasicEventCut&
   fAcceptBadVertex(c.fAcceptBadVertex),
   fNEventsPassed(0),
   fNEventsFailed(0),
-  fAcceptOnlyPhysics(c.fAcceptOnlyPhysics),
   fSelectTrigger(c.fSelectTrigger)
 {
   fEventMult[0] = c.fEventMult[0];
