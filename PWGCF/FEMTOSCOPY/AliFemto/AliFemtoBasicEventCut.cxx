@@ -52,6 +52,12 @@ AliFemtoBasicEventCut::AliFemtoBasicEventCut(const AliFemtoBasicEventCut::Config
 {
   fEventMult[0] = cfg.mult_range.first;
   fEventMult[1] = cfg.mult_range.second;
+
+  fVertZPos[0] = cfg.vertex_z_range.first;
+  fVertZPos[1] = cfg.vertex_z_range.second;
+
+  fPsiEP[0] = cfg.psi_ep_range.first;
+  fPsiEP[1] = cfg.psi_ep_range.second;
 }
 
 

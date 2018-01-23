@@ -44,7 +44,7 @@ private:   // here are the quantities I want to cut on...
   bool  fAcceptBadVertex;  // Set to true to accept events with bad vertex
   long  fNEventsPassed;    // Number of events checked by this cut that passed
   long  fNEventsFailed;    // Number of events checked by this cut that failed
-  
+
   int   fHighOrLowSwitch;             // if 1, then previous hbtEvent was high; if -1, then previous event was low.
   bool  fEventMultQASwitch;           // Turn on multiplicity exclusion zone (true=on)
   int   fEventMultQAExclusionZone[2]; // Set limits of the multiplicity exclusion zone
@@ -79,7 +79,7 @@ inline AliFemtoQAEventCut::AliFemtoQAEventCut(const AliFemtoQAEventCut& c) :
   fEventMult[1] = c.fEventMult[1];
   fVertZPos[0] = c.fVertZPos[0];
   fVertZPos[1] = c.fVertZPos[1];
-  
+
   fEventMultQAExclusionZone[0] = c.fEventMultQAExclusionZone[0];
   fEventMultQAExclusionZone[1] = c.fEventMultQAExclusionZone[1];
   fEventZPosQAExclusionZone[0] = c.fEventZPosQAExclusionZone[0];

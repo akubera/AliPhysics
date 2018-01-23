@@ -25,7 +25,6 @@
     fEventMult[1] = 100000;
     fVertZPos[0] = -100.0;
     fVertZPos[1] = 100.0;
-
     fHighOrLowSwitch = 1;
     fEventMultQASwitch = false;
     fEventZPosQASwitch = false;
@@ -33,7 +32,6 @@
     fEventMultQAExclusionZone[1] = 100000;
     fEventZPosQAExclusionZone[0] = -100.0;
     fEventZPosQAExclusionZone[1] = 100.0;
-
   }
   //------------------------------
   AliFemtoQAEventCut::~AliFemtoQAEventCut(){
@@ -49,7 +47,6 @@
       fEventMult[1] = c.fEventMult[1];
       fVertZPos[0] = c.fVertZPos[0];
       fVertZPos[1] = c.fVertZPos[1];
-
       fHighOrLowSwitch = c.fHighOrLowSwitch;
       fEventMultQASwitch = c.fEventMultQASwitch;
       fEventZPosQASwitch = c.fEventZPosQASwitch;

@@ -23,7 +23,7 @@ public:
   void SetMultEst1Range(const unsigned short &lo, const unsigned short &hi);
   void SetMultEst2Range(const unsigned short &lo, const unsigned short &hi);
   void SetMultEst3Range(const unsigned short &lo, const unsigned short &hi);
-  
+
   void SetCentEst1Range(const float &lo, const float &hi);
   void SetCentEst2Range(const float &lo, const float &hi);
   void SetCentEst3Range(const float &lo, const float &hi);
@@ -49,7 +49,7 @@ private:   // here are the quantities I want to cut on...
   unsigned char fUseMultEst1;  // if 1 cut on Mult Est 1
   unsigned char fUseMultEst2;  // if 1 cut on Mult Est 2
   unsigned char fUseMultEst3;  // if 1 cut on Mult Est 3
-  
+
   float fEventCentEst1[2];      // range of multiplicity
   float fEventCentEst2[2];      // range of multiplicity
   float fEventCentEst3[2];      // range of multiplicity
@@ -85,9 +85,9 @@ inline AliFemtoEventCut* AliFemtoEventCutEstimators::Clone() const { AliFemtoEve
 inline void AliFemtoEventCutEstimators::SetVerboseMode(bool aVerbose) {fVerbose = aVerbose;}
 
 inline AliFemtoEventCutEstimators::AliFemtoEventCutEstimators(const AliFemtoEventCutEstimators& c):
-  AliFemtoEventCut(c), 
+  AliFemtoEventCut(c),
   fVerbose(c.fVerbose),
-  fUseMultEst1(c.fUseMultEst1), fUseMultEst2(c.fUseMultEst2), fUseMultEst3(c.fUseMultEst3), 
+  fUseMultEst1(c.fUseMultEst1), fUseMultEst2(c.fUseMultEst2), fUseMultEst3(c.fUseMultEst3),
   fUseCentEst1(c.fUseCentEst1), fUseCentEst2(c.fUseCentEst2), fUseCentEst3(c.fUseCentEst3), fUseCentEst4(c.fUseCentEst4),
   fNEventsPassed(0), fNEventsFailed(0) {
   fEventMultEst1[0] = c.fEventMultEst1[0];  fEventMultEst1[1] = c.fEventMultEst1[1];
