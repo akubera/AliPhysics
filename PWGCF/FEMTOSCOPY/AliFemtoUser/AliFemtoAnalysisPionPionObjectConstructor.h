@@ -781,11 +781,45 @@ struct Configuration<AliFemtoModelCorrFctnDEtaDPhiStar> : AbstractConfiguration<
 };
 #endif
 
-#if defined(ALIFEMTOFBLKSBUJ)
-template<>
-struct Configuration<AliFemtoEventCutCentrality> {
-
+/*
+#if defined(AliFemtoEventCut_hh) && !defined(ALIFEMTOCONFSTRUCTOR_AliFemtoEventCut_hh)
+#define ALIFEMTOCONFSTRUCTOR_AliFemtoEventCut_hh
+template <>
+struct AbstractConfiguration<AliFemtoEventCut> {
+  operator AliFemtoe
 };
+#endif
+*/
+
+#if defined(ALIFEMTOEVENTCUTCENTRALITY_H) && !defined(ALIFEMTOCONSTRUCTOR_ALIFEMTOEVENTCUTCENTRALITY_H)
+#define ALIFEMTOCONSTRUCTOR_ALIFEMTOEVENTCUTCENTRALITY_H
+
+template<>
+struct Configuration<AliFemtoEventCutCentrality> : AbstractConfiguration<AliFemtoEventCut> {
+  using Super = AbstractConfiguration<AliFemtoEventCut>;
+
+  using RangeF_t = AliFemtoConfigObject::RangeValue_t;
+
+  RangeF_t centrality, z, epvzero;
+  int trigger_selection;
+
+
+  void Configure(AliFemtoEventCutCentrality &cut) const
+  {
+    //Super::Configure(cut);
+    cut.SetCentralityRange(centrality.first, centrality.second);
+    cut.SetZPosRange(z.first, z.second);
+    cut.SetEPVZERO(epvzero.first, epvzero.second);
+    cut.SetTriggerSelection(trigger_selection);
+
+  }
+  virtual operator AliFemtoEventCut*() const {
+    AliFemtoEventCutCentrality *cut = new AliFemtoEventCutCentrality();
+    Configure(*cut);
+    return cut;
+  }
+};
+
 #endif
 
 
@@ -793,9 +827,12 @@ struct Configuration<AliFemtoEventCutCentrality> {
 #define ALIFEMTOCONSTRUCTOR_ALIFEMTOPARTICLECUT_H
 
 template<>
-struct Configuration<AliFemtoParticleCut>
+struct AbstractConfiguration<AliFemtoParticleCut>
 {
   Double_t mass;
+  void Configure(AliFemtoParticleCut &cut) const {
+    cut.SetMass(mass);
+  }
 };
 
 #endif
@@ -805,21 +842,50 @@ struct Configuration<AliFemtoParticleCut>
 #define ALIFEMTOCONSTRUCTOR_ALIFEMTOESDTRACKCUT_H
 
 template<>
-struct Configuration<AliFemtoESDTrackCut> : Configuration<AliFemtoParticleCut>
+struct Configuration<AliFemtoESDTrackCut> : AbstractConfiguration<AliFemtoParticleCut>
 {
+  using Super = AbstractConfiguration<AliFemtoParticleCut>;
   using RangeF_t = std::pair<float, float>;
   RangeF_t pt = {0.2, 2.0},
+           rapidity = {-2.0, 2.0},
             eta = {-0.8, 0.8},
             DCA = {0.5, 4.0},
             nSigma = {-3.0, 3.0};
 
-  Int_t charge = 1,
+  Int_t charge = 0,
+        label = 0,
         min_tpc_ncls = 80;
 
   Float_t max_impact_xy = 2.4,
+          min_impact_xy = 0,
           max_impact_z = 3.0,
           max_tpc_chi_ndof = 0.032,
           max_its_chi_ndof = 0.032;
+  Float_t sigma = 3.;
+  Bool_t electron_rejection = true,
+         remove_kinks = true;
+
+
+  void Configure(AliFemtoESDTrackCut &cut) const {
+    Super::Configure(cut);
+    cut.SetCharge(charge);
+    cut.SetPt(pt.first, pt.second);
+    cut.SetEta(eta.first, eta.second);
+    cut.SetRapidity(rapidity.first, rapidity.second);
+    cut.SetMaxImpactZ(max_impact_z);
+    cut.SetMaxImpactXY(max_impact_xy);
+    cut.SetMinImpactXY(min_impact_xy);
+    cut.SetElectronRejection(electron_rejection);
+    cut.SetRemoveKinks(remove_kinks);
+  }
+
+  virtual operator AliFemtoParticleCut*() const {
+    AliFemtoESDTrackCut *cut = new AliFemtoESDTrackCut();
+    Configure(*cut);
+    return cut;
+  }
+
+
 };
 
 #if defined(ALIFEMTOCORRFCTN3DLCMS_H) && !defined(ALIFEMTOCONSTRUCTOR_ALIFEMTOCORRFCTN3DLCMS_H)
