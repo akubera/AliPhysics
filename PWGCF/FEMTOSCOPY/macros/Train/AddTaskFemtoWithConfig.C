@@ -81,11 +81,14 @@ AliAnalysisTaskFemto* AddTaskFemtoWithConfig(TString configuration,
   const AliFemtoConfigObject cfg
 	  = AliFemtoConfigObject::ParseWithDefaults(configuration, CONFIG_DEFAULTS);
 
+#ifndef nullptr
+#define nullptr 0
+#endif
+
   std::string macro_name;
   if (!cfg.find_and_load("macro", macro_name)) {
-    std::cerr << " ** Error - Configuration missing key 'macro'.\n"
-                 "      Please include path to macro file, similar to "
-		 "{macro: '%%/PionPionFemto/ConfigFemtoAnalysis.C'}\n";
+    std::cerr << " ** Error - Configuration missing key 'macro' with string value.\n"
+                 "      Please include path to macro file, similar to {macro: '%%/PionPionFemto/ConfigFemtoAnalysis.C'}\n";
     return nullptr;
   }
 
@@ -94,7 +97,7 @@ AliAnalysisTaskFemto* AddTaskFemtoWithConfig(TString configuration,
   AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager();
   if (!mgr) {
     Error("AddTaskFemtoWithConfig", "Could not get the global AliAnalysisManager.");
-    return NULL;
+    return nullptr;
   }
 
 
