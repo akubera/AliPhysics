@@ -75,6 +75,10 @@ public:
                            const AnalysisParams&,
                            const CutParams&);
 
+  /// Build from only Config Object
+  AliFemtoAnalysisPionPion(AliFemtoConfigObject obj);
+
+//
   virtual void EventBegin(const AliFemtoEvent*);
   virtual void EventEnd(const AliFemtoEvent*);
 

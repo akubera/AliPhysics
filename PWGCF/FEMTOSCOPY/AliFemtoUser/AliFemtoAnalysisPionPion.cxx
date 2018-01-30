@@ -45,23 +45,8 @@ static const double PionMass = 0.13956995;
 static const int UNKNOWN_CHARGE = -9999;
 
 template<>
-struct Configuration<AliFemtoAnalysisPionPion> {
-    int foo;
+struct Configuration<AliFemtoAnalysisPionPion>;
 
-    Configuration()
-    : foo(123)
-    {}
-
-    Configuration(AliFemtoConfigObject cfg):
-      Configuration()
-    {
-      cfg.pop_and_load("foo", foo);
-    }
-
-    operator AliFemtoAnalysisPionPion*() const {
-      return nullptr;
-    }
-};
 
 AliFemtoAnalysisPionPion::AnalysisParams::AnalysisParams()
 : vertex_bins(16), vertex_min(-10.0), vertex_max(10.0)
@@ -249,11 +234,10 @@ AliFemtoAnalysisPionPion::AliFemtoAnalysisPionPion(const char *name,
 {
 }
 
-AliFemtoAnalysisPionPion
-  ::AliFemtoAnalysisPionPion(const char *name,
-                             const PionType pion_1,
-                             const PionType pion_2,
-                             const CutParams &cut_params):
+AliFemtoAnalysisPionPion::AliFemtoAnalysisPionPion(const char *name,
+                                                   const PionType pion_1,
+                                                   const PionType pion_2,
+                                                   const CutParams &cut_params):
     AliFemtoAnalysisPionPion(name, analysis_params_from_pion_types(pion_1, pion_2), cut_params)
 {
 }
@@ -952,3 +936,44 @@ AliFemtoAnalysisPionPion::ConstructCorrelationFunction(AliFemtoConfigObject cfg)
 
   return result;
 }
+
+template<>
+struct Configuration<AliFemtoAnalysisPionPion> {
+
+  /// Name of the analysis
+  TString name;
+
+  /// type of pions
+  AliFemtoAnalysisPionPion::PionType type1, type2;
+
+  /// output the settings (no - just use the config, please)
+  bool output_settings = false;
+
+  /// Analysis over montecarlo data
+  bool is_mc_analysis = false;
+
+  Configuration(AliFemtoConfigObject cfg)
+    : name("_PionPionAnalysis")
+    , type1(kPiPlus)
+    , type2(kPiMinus)
+  {
+    cfg.pop_all()
+      ("name", name)
+      ("pion1", type1)
+      ("pion2", type2)
+      ("is_mc_analysis", is_mc_analysis)
+      .WarnOfRemainingItems();
+  }
+
+  Configuration(AliFemtoConfigObject cfg):
+    Configuration()
+  {
+  }
+
+  operator AliFemtoAnalysis*() const {
+    AliFemtoAnalysisPionPion *analysis = new AliFemtoAnalysisPionPion();
+    analysis->SetName(name);
+    // analysis->SetConfig(name);
+    return nullptr;
+  }
+};
