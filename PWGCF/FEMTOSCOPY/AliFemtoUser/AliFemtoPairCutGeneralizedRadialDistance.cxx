@@ -37,6 +37,7 @@ AliFemtoPairCutGeneralizedRadialDistance::~AliFemtoPairCutGeneralizedRadialDista
 AliFemtoPairCutGeneralizedRadialDistance& AliFemtoPairCutGeneralizedRadialDistance::operator=(const AliFemtoPairCutGeneralizedRadialDistance& c)
 {
   if (this != &c) {
+    AliFemtoPairCutAntiGamma::operator=(c);
     fDPhiStarMin = c.fDPhiStarMin;
     fDEtaStarMin = c.fDEtaStarMin;
     fRadius = c.fRadius;

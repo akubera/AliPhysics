@@ -28,7 +28,7 @@ AliFemtoPairCutAntiGamma(),
   fDPhiStarRangeLow(0.0),
   fDPhiStarRangeUp(0.0),
   fMagSign(1)
-  
+
 {
   fRadiusMin = aRadiusMin;
   fRadiusMax = aRadiusMax;
@@ -63,11 +63,12 @@ AliFemtoPairCutRadialDistanceAsymmetric::AliFemtoPairCutRadialDistanceAsymmetric
 
 //__________________
   AliFemtoPairCutRadialDistanceAsymmetric::~AliFemtoPairCutRadialDistanceAsymmetric(){
-  
+
 }
 
 AliFemtoPairCutRadialDistanceAsymmetric& AliFemtoPairCutRadialDistanceAsymmetric::operator=(const AliFemtoPairCutRadialDistanceAsymmetric& cPairCut) {
   if(this != &cPairCut) {
+    AliFemtoPairCutAntiGamma::operator=(cPairCut);
     fRadiusMin = cPairCut.fRadiusMin;
     fRadiusMax = cPairCut.fRadiusMax;
     fCalculateRadiusRange = cPairCut.fCalculateRadiusRange;
@@ -85,7 +86,7 @@ bool AliFemtoPairCutRadialDistanceAsymmetric::Pass(const AliFemtoPair* pair) {
 
   if(AliFemtoPairCutAntiGamma::fDataType == kKine)
     return true;
-  
+
   // Prepare variables:
   double phi1 = pair->Track1()->Track()->P().Phi();
   double phi2 = pair->Track2()->Track()->P().Phi();
@@ -134,11 +135,11 @@ bool AliFemtoPairCutRadialDistanceAsymmetric::Pass(const AliFemtoPair* pair) {
   }
 
   Bool_t pairpass = kTRUE;
-  
+
   // Iterate through all radii in range (fRadiusMin, fRadiusMax):
   if(fCalculateRadiusRange == true) {
     for(double irad = fRadiusMin; irad < fRadiusMax; irad = irad + 0.01) {
-    
+
       // Calculate radius:
       Double_t rad = irad;
 
@@ -187,7 +188,7 @@ bool AliFemtoPairCutRadialDistanceAsymmetric::Pass(const AliFemtoPair* pair) {
       pairpass = kTRUE;
     }
   }
-  
+
   // Check the antigamma cut:
   if (pairpass) {
     pairpass = AliFemtoPairCutAntiGamma::Pass(pair);
@@ -244,11 +245,11 @@ void AliFemtoPairCutRadialDistanceAsymmetric::SetDEtaRangeUp(double maxeta) {
 
 //__________________
 void AliFemtoPairCutRadialDistanceAsymmetric::SetMagneticFieldSign(int magsign) {
-  if(magsign>1) 
+  if(magsign>1)
     fMagSign = 1;
-  else if(magsign<1) 
+  else if(magsign<1)
     fMagSign = -1;
-  else 
+  else
     fMagSign = magsign;
 }
 

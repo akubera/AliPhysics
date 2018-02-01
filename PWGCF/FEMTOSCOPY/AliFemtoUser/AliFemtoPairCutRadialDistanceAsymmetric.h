@@ -40,14 +40,14 @@ class AliFemtoPairCutRadialDistanceAsymmetric : public AliFemtoPairCutAntiGamma 
   void SetCalculateRadiusRange(bool calculaterange);
 
  protected:
-  Double_t fDPhiStarRangeLow;       // Lower range of pair separation cut in DPhiStar [rad]
-  Double_t fDPhiStarRangeUp;        // Upper range of pair separation cut in DPhiStar [rad]
-  Double_t fDEtaRangeLow;           // Lower range of pair separation cut in DEta
-  Double_t fDEtaRangeUp;            // Upper range of pair separation cut in DEta
-  Int_t fMagSign;                   // Magnetic field sign (+1/-1)
   Double_t fRadiusMin;              // Minimum radius at which the pair separation is calculated [m]
   Double_t fRadiusMax;              // Maximum radius at which the pair separation is calculated [m]
   Bool_t fCalculateRadiusRange;     // If true: iterate through all radii in range (fRadiusMin, fRadiusMax), if false: perform cut only for fRadiusMin
+  Double_t fDEtaRangeLow;           // Lower range of pair separation cut in DEta
+  Double_t fDEtaRangeUp;            // Upper range of pair separation cut in DEta
+  Double_t fDPhiStarRangeLow;       // Lower range of pair separation cut in DPhiStar [rad]
+  Double_t fDPhiStarRangeUp;        // Upper range of pair separation cut in DPhiStar [rad]
+  Int_t fMagSign;                   // Magnetic field sign (+1/-1)
 
 #ifdef __ROOT__
   ClassDef(AliFemtoPairCutRadialDistanceAsymmetric, 0)
