@@ -16,6 +16,7 @@ class AliFemtoEvent;
 #include "AliFemtoCutMonitor.h"
 #include "AliFemtoCutMonitorHandler.h"
 #include "AliFemtoAnalysisPionLambda.h"
+#include "AliFemtoConfigObject.h"
 
 
 /// \namespace AliFemtoCutMonitorPionPion
@@ -38,10 +39,33 @@ class AliFemtoEvent;
 ///
 namespace AliFemtoCutMonitorPionPion {
 
+  ///
+  struct th1_axis_cfg {
+    int nbins;
+    std::pair<double, double> limits;
+  };
+
+  struct th2_axis_cfg {
+    th1_axis_cfg x, y;
+  };
+
   /// \class AliFemtoCutMonitorPionPion::Event
   /// \brief Event cut monitor for PionPion analysis
   class Event : public AliFemtoCutMonitor {
   public:
+
+    struct Config {
+      th2_axis_cfg cent_mult;
+      th2_axis_cfg vertex_xy;
+      th1_axis_cfg vertex_z;
+
+      th1_axis_cfg collection_size;
+
+      bool is_identical_analysis;
+
+      Config();
+      Config(AliFemtoConfigObject);
+    };
 
     /// Construct event cut monitor with knowledge if a passing or failing cut.
     ///
@@ -55,6 +79,19 @@ namespace AliFemtoCutMonitorPionPion {
           const bool is_identical_analysis=kFALSE,
           const bool is_mc_analysis=kFALSE,
           const bool suffix_output=kFALSE);
+
+    /// Build from a configuration object
+    ///
+    /// Build
+    Event(const bool passing, const Config&);
+
+    /// Build from an AliFemtoConfigObject - still must know if it's
+    ///
+    /// Build
+    Event(const bool passing, AliFemtoConfigObject);
+
+    /// Build pass/fail pair of cut-monitors from a configuration object
+    static std::pair<Event*, Event*> BuildPair(AliFemtoConfigObject);
 
     /// Return list of Histograms to be placed in output file.
     virtual TList* GetOutputList();
@@ -70,6 +107,9 @@ namespace AliFemtoCutMonitorPionPion {
     /// Save information about the particle collection
     virtual void Fill(const AliFemtoParticleCollection *,
                       const AliFemtoParticleCollection *);
+
+    /// Get this objects configuration
+    AliFemtoConfigObject GetConfiguration() const;
 
   protected:
 

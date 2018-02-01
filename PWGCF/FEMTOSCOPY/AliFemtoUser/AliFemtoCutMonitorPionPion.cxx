@@ -23,6 +23,8 @@ static const double PionMass = 0.13956995;
 #include <map>
 #include <string>
 #include <vector>
+#include <array>
+
 
 AliFemtoCutMonitorPionPion::Event::Event(const bool passing,
                                          const bool is_identical_analysis,
@@ -51,14 +53,12 @@ AliFemtoCutMonitorPionPion::Event::Event(const bool passing,
     100, 0, 100.0,
     100, 0, 10000.0
   );
-  fCentMult->Sumw2();
 
   fVertexZ = new TH1F(
     "VertexZ" + pf,
     TString::Format("Vertex Z Distribution%s;z (cm);N_{ev}", title_suffix),
     128, -15.0f, 15.0f
   );
-  fVertexZ->Sumw2();
 
   fVertexXY = new TH2F(
     "VertexXY" + pf,
@@ -68,7 +68,6 @@ AliFemtoCutMonitorPionPion::Event::Event(const bool passing,
     // 48, 0.0f, 0.12f,
     // 48, 0.22f, 0.32f
   );
-  fVertexXY->Sumw2();
 
   // only create _collection_size histograms if this is the passing event cut monitor
   if (passing) {
@@ -78,7 +77,6 @@ AliFemtoCutMonitorPionPion::Event::Event(const bool passing,
                                                  "Size of particle collection;"
                                                  "# pions; N_{ev}",
                                                  100, -0.5, 1000.5);
-      _identical_collection_size_pass->Sumw2();
       _identical_collection_size_fail = (TH1I*)_identical_collection_size_pass->Clone("collection_size_f");
     } else {
       _collection_size_pass = new TH2I("collection_size_p",
@@ -91,6 +89,137 @@ AliFemtoCutMonitorPionPion::Event::Event(const bool passing,
       _collection_size_fail = (TH2I*)_collection_size_pass->Clone("collection_size_f");
     }
   }
+}
+
+// AliFemtoCutMonitorPionPion::Event::Config AliFemtoCutMonitorPionPion::Event::Config::_default {
+AliFemtoCutMonitorPionPion::Event::Config::Config()
+  : cent_mult(
+      { {100, {0.0, 100.0}}
+      , {100, {0.0, 10000.0}}
+      })
+  , vertex_xy(
+      { {48, {0.05f, 0.095f}}
+      , {48, {0.31f, 0.355f}}
+      })
+  , vertex_z({128, {-15.0, 15.0}})
+  , collection_size({100, {-0.5, 1000.5}})
+  , is_identical_analysis(false)
+{
+}
+
+
+AliFemtoCutMonitorPionPion::Event::Config::Config(AliFemtoConfigObject cfg):
+  Config()
+{
+  cfg.pop_all()
+    ("vertexZ.nbins", vertex_z.nbins)
+    ("vertexZ.limits", vertex_z.limits)
+
+    ("vertexXY.x.nbins", vertex_xy.x.nbins)
+    ("vertexXY.x.limits", vertex_xy.x.limits)
+    ("vertexXY.y.nbins", vertex_xy.y.nbins)
+    ("vertexXY.y.limits", vertex_xy.y.limits)
+
+    ("cent.nbins",  cent_mult.x.nbins)
+    ("cent.limits", cent_mult.x.limits)
+    ("mult.nbins",  cent_mult.y.nbins)
+    ("mult.limits", cent_mult.y.limits)
+
+    ("collection_size.nbins", collection_size.nbins)
+    ("collection_size.limits", collection_size.limits)
+
+    ("identical_analysis", is_identical_analysis)
+    .WarnOfRemainingItems();
+}
+
+AliFemtoConfigObject
+AliFemtoCutMonitorPionPion::Event::GetConfiguration() const
+{
+  AliFemtoConfigObject::MapValue_t map;
+  map["vertexZ.nbins"] = fCentMult->GetNbinsX();
+  map["vertexZ.limits"] = std::make_pair(fCentMult->GetXaxis()->GetXmin(), fCentMult->GetXaxis()->GetXmax());
+
+  map["vertexXY.x.nbins"] = fVertexXY->GetNbinsX();
+  map["vertexXY.x.limits"] = std::make_pair(fVertexXY->GetXaxis()->GetXmin(), fVertexXY->GetXaxis()->GetXmax());
+  map["vertexXY.y.nbins"] = fVertexXY->GetNbinsY();
+  map["vertexXY.y.limits"] = std::make_pair(fVertexXY->GetYaxis()->GetXmin(), fVertexXY->GetYaxis()->GetXmax());
+
+  return AliFemtoConfigObject(std::move(map));
+}
+
+
+AliFemtoCutMonitorPionPion::Event::Event(const bool passing, AliFemtoConfigObject cfg):
+  AliFemtoCutMonitorPionPion::Event(passing, Config(cfg))
+{
+}
+
+AliFemtoCutMonitorPionPion::Event::Event(const bool passing, const AliFemtoCutMonitorPionPion::Event::Config& cfg):
+  AliFemtoCutMonitor()
+  , fCentMult(nullptr)
+  , fVertexZ(nullptr)
+  , fVertexXY(nullptr)
+  , _collection_size_pass(nullptr)
+  , _collection_size_fail(nullptr)
+  , _identical_collection_size_pass(nullptr)
+  , _identical_collection_size_fail(nullptr)
+  , _prev_ev(nullptr)
+  , _prev_pion_coll_1_size(0)
+  , _prev_pion_coll_2_size(0)
+{
+  const char *title_suffix = (passing ? " (PASS)" : " (FAIL)");
+
+  const TString pf("");
+  bool is_identical_analysis = false;
+
+  fCentMult = new TH2F(
+    "cent_mult" + pf,
+    TString::Format("Event Centrality vs Multiplicity%s;"
+                    "centrality; multiplicity (N_{tracks}); N_{ev}", title_suffix),
+    cfg.cent_mult.x.nbins, cfg.cent_mult.x.limits.first, cfg.cent_mult.x.limits.second,
+    cfg.cent_mult.y.nbins, cfg.cent_mult.y.limits.first, cfg.cent_mult.y.limits.second
+  );
+
+  fVertexZ = new TH1F(
+    "VertexZ" + pf,
+    TString::Format("Vertex Z Distribution%s;z (cm);N_{ev}", title_suffix),
+    cfg.vertex_z.nbins, cfg.vertex_z.limits.first, cfg.vertex_z.limits.second
+  );
+
+  fVertexXY = new TH2F(
+    "VertexXY" + pf,
+    TString::Format("Vertex XY Distribution%s;x (cm);y (cm); dN/(dx $\\cdot$ dy)", title_suffix),
+    cfg.vertex_xy.x.nbins, cfg.vertex_xy.x.limits.first, cfg.vertex_xy.x.limits.second,
+    cfg.vertex_xy.y.nbins, cfg.vertex_xy.y.limits.first, cfg.vertex_xy.y.limits.second
+  );
+
+  // only create _collection_size histograms if this is the passing event cut monitor
+  if (passing) {
+    // if identical - then skip this
+    if (is_identical_analysis) {
+      _identical_collection_size_pass = new TH1I("collection_size_p",
+                                                 "Size of particle collection;"
+                                                 "# pions; N_{ev}",
+                                                 cfg.collection_size.nbins, cfg.collection_size.limits.first, cfg.collection_size.limits.second);
+      _identical_collection_size_fail = (TH1I*)_identical_collection_size_pass->Clone("collection_size_f");
+    } else {
+      _collection_size_pass = new TH2I("collection_size_p",
+                                       "Size of Particle Collection in Passing Events;"
+                                       "# pions (1);"
+                                       "# pions (2);"
+                                       "N_{ev}",
+                                       cfg.collection_size.nbins, cfg.collection_size.limits.first, cfg.collection_size.limits.second,
+                                       cfg.collection_size.nbins, cfg.collection_size.limits.first, cfg.collection_size.limits.second);
+      _collection_size_fail = (TH2I*)_collection_size_pass->Clone("collection_size_f");
+    }
+  }
+}
+
+
+auto
+AliFemtoCutMonitorPionPion::Event::BuildPair(AliFemtoConfigObject cfg) -> std::pair<Event*, Event*>
+{
+  Config config(cfg);
+  return std::make_pair(new Event(true, config), new Event(false, config));
 }
 
 
