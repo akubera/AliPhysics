@@ -23,6 +23,20 @@ AliFemtoKtBinnedCorrFunc::AliFemtoKtBinnedCorrFunc(const TString& name, AliFemto
 { // no-op
 }
 
+AliFemtoKtBinnedCorrFunc::AliFemtoKtBinnedCorrFunc(AliFemtoConfigObject cfg):
+  fName(cfg.pop_str("name", "AliFemtoKtBinnedCorrFunc")),
+  fPrototypeCF(nullptr)
+{
+  auto *cf_cfg = cfg.pop("cf");
+  if (cf_cfg == nullptr) {
+    throw std::runtime_error("AliFemtoKtBinnedCorrFunc:: Configuration object missing 'cf' key - please specify a correlation function");
+  }
+  // BuildAliFemtoCorrFunc(*cf_cfg)
+
+
+  delete cf_cfg;
+}
+
 AliFemtoKtBinnedCorrFunc::~AliFemtoKtBinnedCorrFunc()
 {
   delete fPrototypeCF;

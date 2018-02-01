@@ -8,6 +8,7 @@
 #define ALIFEMTOKTBINNEDCORRFUNC_H_
 
 #include "AliFemtoCorrFctn.h"
+#include "AliFemtoConfigObject.h"
 #include <TString.h>
 #include <vector>
 
@@ -24,9 +25,26 @@ public:
   /// each bin added
   AliFemtoKtBinnedCorrFunc(const TString& name, AliFemtoCorrFctn*);
 
+  /// Construct from configuration object
+  ///
+  /// Examples
+  /// --------
+  ///
+  /// { class: 'AliFemtoKtBinnedCorrFctn',
+  ///   name: 'BinCF'
+  ///   ranges: (0.1:0.2:0.3,1.5:2.0),
+  ///   cf: {
+  ///     class: 'AliFemtoCorrFctnDEtaDPhi',
+  ///     ... },
+  /// }
+  ///
+  ///
+  AliFemtoKtBinnedCorrFunc(AliFemtoConfigObject cfg);
+
+
   /// Destructor
   ///
-  /// Deletes the prototype correlation function 
+  /// Deletes the prototype correlation function
   ///
   virtual ~AliFemtoKtBinnedCorrFunc();
 
