@@ -54,6 +54,8 @@ struct Configuration;
 ///
 template <typename T>
 struct AbstractConfiguration {
+  using Super = AbstractConfiguration<T>;
+
   virtual operator T*() const = 0;
 };
 
@@ -313,7 +315,6 @@ struct AbstractConfiguration<AliFemtoEventCut> {
 
 template<>
 struct Configuration<AliFemtoEventCutCentrality> : AbstractConfiguration<AliFemtoEventCut> {
-  using Super = AbstractConfiguration<AliFemtoEventCut>;
 
   using RangeF_t = AliFemtoConfigObject::RangeValue_t;
 
@@ -359,6 +360,8 @@ struct Configuration<AliFemtoEventCutCentrality> : AbstractConfiguration<AliFemt
 template<>
 struct AbstractConfiguration<AliFemtoParticleCut>
 {
+  using Super = AbstractConfiguration<AliFemtoParticleCut>;
+
   Double_t mass;
   void Configure(AliFemtoParticleCut &cut) const {
     cut.SetMass(mass);
@@ -374,7 +377,6 @@ struct AbstractConfiguration<AliFemtoParticleCut>
 template<>
 struct Configuration<AliFemtoESDTrackCut> : AbstractConfiguration<AliFemtoParticleCut>
 {
-  using Super = AbstractConfiguration<AliFemtoParticleCut>;
   using RangeF_t = std::pair<float, float>;
   RangeF_t pt = {0.2, 2.0},
            rapidity = {-2.0, 2.0},
@@ -552,6 +554,7 @@ struct Configuration<AliFemtoPairCutAntiGamma> : Configuration<AliFemtoShareQual
 #define ALIFEMTOCONSTRUCTOR_ALIFEMTOCORRFCTN_H
 template<>
 struct AbstractConfiguration<AliFemtoCorrFctn> {
+  using Super = AbstractConfiguration<AliFemtoCorrFctn>;
 
   AliFemtoConfigObject pair_cut_cfg;
 
@@ -581,7 +584,6 @@ struct AbstractConfiguration<AliFemtoCorrFctn> {
 #define ALIFEMTOCONSTRUCTOR_ALIFEMTOAVGSEPCORRFCTN_H
 template<>
 struct Configuration<AliFemtoAvgSepCorrFctn> : AbstractConfiguration<AliFemtoCorrFctn> {
-  using Super = AbstractConfiguration<AliFemtoCorrFctn>;
 
   std::string name;
   Int_t nbins { 100 };
@@ -599,7 +601,8 @@ struct Configuration<AliFemtoAvgSepCorrFctn> : AbstractConfiguration<AliFemtoCor
       .WarnOfRemainingItems();
   }
 
-  virtual operator AliFemtoCorrFctn*() const {
+  virtual operator AliFemtoCorrFctn*() const
+  {
     AliFemtoAvgSepCorrFctn *ptr = new AliFemtoAvgSepCorrFctn(name.c_str(), nbins, low, high);
     Super::Configure(*ptr);
     return ptr;
@@ -612,7 +615,6 @@ struct Configuration<AliFemtoAvgSepCorrFctn> : AbstractConfiguration<AliFemtoCor
 #define ALIFEMTOCONSTRUCTOR_ALIFEMTOMODELCORRFCTN_TRUEQ3D_H
 template<>
 struct Configuration<AliFemtoModelCorrFctnTrueQ3D> : AbstractConfiguration<AliFemtoCorrFctn> {
-  using Super = AbstractConfiguration<AliFemtoCorrFctn>;
 
   AliFemtoModelCorrFctnTrueQ3D::Parameters params;
 
@@ -627,7 +629,8 @@ struct Configuration<AliFemtoModelCorrFctnTrueQ3D> : AbstractConfiguration<AliFe
       .WarnOfRemainingItems();
   }
 
-  virtual operator AliFemtoCorrFctn*() const {
+  virtual operator AliFemtoCorrFctn*() const
+  {
     AliFemtoModelCorrFctnTrueQ3D *ptr = new AliFemtoModelCorrFctnTrueQ3D(params);
     Super::Configure(*ptr);
     return ptr;
@@ -640,7 +643,6 @@ struct Configuration<AliFemtoModelCorrFctnTrueQ3D> : AbstractConfiguration<AliFe
 #define ALIFEMTOCONSTRUCTOR_ALIFEMTOMODELCORRFCTN_TRUEQ3D_H
 template<>
 struct Configuration<AliFemtoModelCorrFctnDEtaDPhiStar> : AbstractConfiguration<AliFemtoCorrFctn> {
-  using Super = AbstractConfiguration<AliFemtoCorrFctn>;
 
   AliFemtoModelCorrFctnTrueQ3D::Parameters params;
 
@@ -655,7 +657,8 @@ struct Configuration<AliFemtoModelCorrFctnDEtaDPhiStar> : AbstractConfiguration<
       .WarnOfRemainingItems();
   }
 
-  virtual operator AliFemtoCorrFctn*() const {
+  virtual operator AliFemtoCorrFctn*() const
+  {
     AliFemtoModelCorrFctnDEtaDPhiStar *ptr = new AliFemtoModelCorrFctnDEtaDPhiStar(params);
     Super::Configure(*ptr);
     return ptr;
@@ -668,11 +671,10 @@ struct Configuration<AliFemtoModelCorrFctnDEtaDPhiStar> : AbstractConfiguration<
 #define ALIFEMTOCONSTRUCTOR_ALIFEMTOCORRFCTN3DLCMS_H
 template<>
 struct Configuration<AliFemtoCorrFctn3DLCMSSym> : AbstractConfiguration<AliFemtoCorrFctn> {
-  using Super = AbstractConfiguration<AliFemtoCorrFctn>;
 
   Bool_t use_LCMS { false };
 
-  TString title;
+  TString title { "AliFemtoCorrFctn3DLCMSSym" };
   Int_t nbins { 100 };
   Float_t qmax { 1.0 };
 
@@ -686,7 +688,8 @@ struct Configuration<AliFemtoCorrFctn3DLCMSSym> : AbstractConfiguration<AliFemto
       .WarnOfRemainingItems();
   }
 
-  virtual operator AliFemtoCorrFctn*() const {
+  virtual operator AliFemtoCorrFctn*() const
+  {
     AliFemtoCorrFctn3DLCMSSym *ptr = new AliFemtoCorrFctn3DLCMSSym(title, nbins, qmax);
     Super::Configure(*ptr);
     ptr->SetUseLCMS(use_LCMS);
@@ -700,9 +703,8 @@ struct Configuration<AliFemtoCorrFctn3DLCMSSym> : AbstractConfiguration<AliFemto
 #define ALIFEMTOCONSTRUCTOR_ALIFEMTOCORRFCTNDIRECTYLM_H
 template<>
 struct Configuration<AliFemtoCorrFctnDirectYlm> : AbstractConfiguration<AliFemtoCorrFctn> {
-  using Super = AbstractConfiguration<AliFemtoCorrFctn>;
 
-  TString name { "cf" };
+  TString name { "AliFemtoCorrFctnDirectYlm" };
 
   int maxL { 4 },
       ibin { 30 };
@@ -724,7 +726,8 @@ struct Configuration<AliFemtoCorrFctnDirectYlm> : AbstractConfiguration<AliFemto
       .WarnOfRemainingItems();
   }
 
-  virtual operator AliFemtoCorrFctn*() const {
+  virtual operator AliFemtoCorrFctn*() const
+  {
     AliFemtoCorrFctnDirectYlm *ptr = new AliFemtoCorrFctnDirectYlm(name, maxL, ibin, vmin, vmax, use_LCMS);
     Super::Configure(*ptr);
     return ptr;
@@ -737,9 +740,8 @@ struct Configuration<AliFemtoCorrFctnDirectYlm> : AbstractConfiguration<AliFemto
 #define ALIFEMTOCONSTRUCTOR_ALIFEMTOCORRFCTNDPHISTARDETA_H
 template<>
 struct Configuration<AliFemtoCorrFctnDPhiStarDEta> : AbstractConfiguration<AliFemtoCorrFctn> {
-  using Super = AbstractConfiguration<AliFemtoCorrFctn>;
 
-  TString name { "cf" };
+  TString name { "AliFemtoCorrFctnDPhiStarDEta" };
 
   AliFemtoConfigObject::RangeValue_t eta_range {-0.1, 0.1},
                                      phi_range {-0.1, 0.1};
@@ -762,7 +764,8 @@ struct Configuration<AliFemtoCorrFctnDPhiStarDEta> : AbstractConfiguration<AliFe
       .WarnOfRemainingItems();
   }
 
-  virtual operator AliFemtoCorrFctn*() const {
+  virtual operator AliFemtoCorrFctn*() const
+  {
     AliFemtoCorrFctnDPhiStarDEta *ptr = new AliFemtoCorrFctnDPhiStarDEta(name,
                                                                          radius,
                                                                          eta_bins,
@@ -771,6 +774,119 @@ struct Configuration<AliFemtoCorrFctnDPhiStarDEta> : AbstractConfiguration<AliFe
                                                                          phi_bins,
                                                                          phi_range.first,
                                                                          phi_range.second);
+    Super::Configure(*ptr);
+    return ptr;
+  }
+};
+#endif
+
+
+#if defined(ALIFEMTOCORRFCTNGAMMAMONITOR_H) && !defined(ALIFEMTOCONSTRUCTOR_ALIFEMTOCORRFCTNGAMMAMONITOR_H)
+#define ALIFEMTOCONSTRUCTOR_ALIFEMTOCORRFCTNGAMMAMONITOR_H
+template<>
+struct Configuration<AliFemtoCorrFctnGammaMonitor> : AbstractConfiguration<AliFemtoCorrFctn> {
+
+  TString name { "AliFemtoCorrFctnGammaMonitor" };
+
+  Int_t minv_bins { 50 },
+        theta_bins { 50 };
+
+
+  Configuration(AliFemtoConfigObject &obj)
+  : Super(obj)
+  {
+    obj.pop_all()
+      ("title", name)
+      ("minv_bins", minv_bins)
+      ("theta_bins", theta_bins)
+      .WarnOfRemainingItems();
+  }
+
+  virtual operator AliFemtoCorrFctn*() const
+  {
+    AliFemtoCorrFctnGammaMonitor *ptr = new AliFemtoCorrFctnGammaMonitor(name,
+                                                                         minv_bins,
+                                                                         theta_bins);
+    Super::Configure(*ptr);
+    return ptr;
+  }
+};
+#endif
+
+
+#if defined(ALIFEMTOCORRFCTNDPHISTARKSTARAVERAGEMERGEDPOINTSFRACTION_H) && !defined(ALIFEMTOCONSTRUCTOR_ALIFEMTOCORRFCTNDPHISTARKSTARAVERAGEMERGEDPOINTSFRACTION_H)
+#define ALIFEMTOCONSTRUCTOR_ALIFEMTOCORRFCTNDPHISTARKSTARAVERAGEMERGEDPOINTSFRACTION_H
+template<>
+struct Configuration<AliFemtoCorrFctnDPhiStarKStarAverageMergedPointsFraction> : AbstractConfiguration<AliFemtoCorrFctn> {
+
+  TString name { "AliFemtoCorrFctnDPhiStarKStarAverageMergedPointsFraction" };
+
+
+  AliFemtoConfigObject::RangeValue_t radius_limits {-0.1, 0.1},
+                                     kstar_limits {-0.1, 0.1},
+                                     pstar_limits {-0.1, 0.1},
+
+
+  Double_t distance_max { 100000.0 },
+           deta_max { 100000.0 };
+
+  Int_t kstar_bins { 50 },
+        pstar_bins { 50 };
+
+
+  Configuration(AliFemtoConfigObject &obj)
+  : Super(obj)
+  {
+    obj.pop_all()
+      ("title", name)
+      ("minv_bins", minv_bins)
+      ("theta_bins", theta_bins);
+  }
+
+  virtual operator AliFemtoCorrFctn*() const
+  {
+    AliFemtoCorrFctnGammaMonitor *ptr = new AliFemtoCorrFctnDPhiStarKStarAverageMergedPointsFraction(
+      name,
+      radius_limits.first, radius_limits.second,
+      distance_max, deta_max,
+      kstar_bins, kstar_range.first, kstar_range.second,
+      pstar_bins, pstar_range.first, pstar_range.second);
+
+    Super::Configure(*ptr);
+    return ptr;
+  }
+};
+#endif
+
+
+#if defined(ALIFEMTOCORRFCTNDPHISTARKSTARMERGEDFRACTION_H) && !defined(ALIFEMTOCONSTRUCTOR_ALIFEMTOCORRFCTNDPHISTARKSTARMERGEDFRACTION_H)
+#define ALIFEMTOCONSTRUCTOR_ALIFEMTOCORRFCTNDPHISTARKSTARMERGEDFRACTION_H
+template<>
+struct Configuration<AliFemtoCorrFctnDPhiStarKStarMergedFraction> : Configuration<AliFemtoCorrFctnDPhiStarKStarAverageMergedPointsFraction> {
+  using Super = Configuration<AliFemtoCorrFctnDPhiStarKStarAverageMergedPointsFraction>;
+
+  TString name { "AliFemtoCorrFctnDPhiStarKStarMergedFraction" };
+
+
+  Double_t merged_fraction_limit { 1.0 };
+
+  Configuration(AliFemtoConfigObject &obj)
+  : Super(obj)
+  {
+    obj.pop_all()
+      ("merged_fraction_limit", merged_fraction_limit)
+      .WarnOfRemainingItems();
+  }
+
+  virtual operator AliFemtoCorrFctn*() const
+  {
+    AliFemtoCorrFctnGammaMonitor *ptr = new AliFemtoCorrFctnDPhiStarKStarMergedFraction(
+      name,
+      radius_limits.first, radius_limits.second,
+      distance_max, merged_fraction_limit, deta_max,
+      kstar_bins, kstar_range.first, kstar_range.second,
+      pstar_bins, pstar_range.first, pstar_range.second);
+
     Super::Configure(*ptr);
     return ptr;
   }
