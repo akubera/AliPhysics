@@ -106,6 +106,7 @@ set(SRCS
   AliFemtoPairCutResonances.cxx
   AliFemtoCorrFctnMinvMonitor.cxx
   AliFemtoCorrFctnPairFractions.cxx
+  AliAnalysisTaskFemtoConfig.cxx
   AliAnalysisTaskParticleEfficiency.cxx
   AliAnalysisTaskParticleFractions.cxx
   AliFemtoPairOriginMonitor.cxx

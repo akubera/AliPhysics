@@ -75,6 +75,7 @@
 #pragma link C++ class AliFemtoPairCutRadialDistanceLM;
 #pragma link C++ class AliFemtoPicoEventRP;
 #pragma link C++ class AliFemtoCorrFctnPairFractions;
+#pragma link C++ class AliAnalysisTaskFemtoConfig+;
 #pragma link C++ class AliAnalysisTaskParticleEfficiency+;
 #pragma link C++ class AliAnalysisTaskParticleFractions+;
 #pragma link C++ class AliFemtoPairOriginMonitor+;
@@ -149,4 +150,3 @@
 #pragma link C++ class AliFemtoModelCorrFctnTrueQ3D+;
 
 #pragma link C++ class AliFemtoPairCutRadialDistanceKKdist;
-
