@@ -1,10 +1,7 @@
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-// AliFemtoCorrFctn3DSpherical: a class to calculate 3D correlation      //
-// for pairs of identical particles, binned in spherical coordinates     //
-// (q_inv, phi, cos(theta))
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+///
+/// \file AliFemto/AliFemtoCorrFctn3DSpherical.h
+///
+
 
 #ifndef ALIFEMTOCORRFCTN3DSPHERICAL_H
 #define ALIFEMTOCORRFCTN3DSPHERICAL_H
@@ -13,6 +10,11 @@
 #include "AliFemtoPairCut.h"
 #include "TH3D.h"
 
+/// \class AliFemtoCorrFctn3DSpherical
+/// \brief Calculates 3D correlation for pairs of identical particles,
+///        binned in spherical coordinates (q_inv, phi, cos(theta))
+///
+///
 class AliFemtoCorrFctn3DSpherical : public AliFemtoCorrFctn {
 public:
 
