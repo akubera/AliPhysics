@@ -82,8 +82,22 @@ AliFemtoVertexMultAnalysis::AliFemtoVertexMultAnalysis(UInt_t binsVertex,
   );
 
 }
-//____________________________
 
+// forward to other constructor
+AliFemtoVertexMultAnalysis::AliFemtoVertexMultAnalysis(const Parameters& params):
+  AliFemtoVertexMultAnalysis(params.vertex_bins,
+                             params.vertex_range.first, params.vertex_range.second,
+                             params.mult_bins,
+                             params.mult_range.first, params.mult_range.second)
+{
+}
+
+AliFemtoVertexMultAnalysis::AliFemtoVertexMultAnalysis(AliFemtoConfigObject &cfg)
+  : AliFemtoVertexMultAnalysis(Parameters(cfg))
+{
+}
+
+//____________________________
 AliFemtoVertexMultAnalysis::AliFemtoVertexMultAnalysis(const AliFemtoVertexMultAnalysis& orig):
   AliFemtoSimpleAnalysis(orig),
   fVertexZBins(orig.fVertexZBins),
@@ -258,4 +272,28 @@ void AliFemtoVertexMultAnalysis::ProcessEvent(const AliFemtoEvent* hbtEvent)
 
   // NULL out the mixing buffer after event processed
   fMixingBuffer = NULL;
+}
+
+
+AliFemtoVertexMultAnalysis::Parameters::Parameters(AliFemtoConfigObject &cfg)
+  : vertex_bins(10)
+  , vertex_range(-100.0, 100.0)
+  , mult_bins(10)
+  , mult_range(-1e9, +1e9)
+{
+  cfg.pop_and_load("vertex_bins", vertex_bins);
+  cfg.pop_and_load("vertex_range", vertex_range);
+  cfg.pop_and_load("mult_bins", mult_bins);
+  cfg.pop_and_load("mult_range", mult_range);
+}
+
+AliFemtoVertexMultAnalysis::Parameters::operator AliFemtoConfigObject() const
+{
+  AliFemtoConfigObject::MapValue_t result;
+
+  result["vertex_bins"] = (AliFemtoConfigObject::IntValue_t)vertex_bins;
+  result["vertex_range"] = vertex_range;
+  result["mult_bins"] = (AliFemtoConfigObject::IntValue_t)mult_bins;
+  result["mult_range"] = mult_range;
+  return result;
 }

@@ -6,6 +6,7 @@
 #define ALIFEMTOVERTEXMULTANALYSIS_H
 
 #include "AliFemtoSimpleAnalysis.h"
+#include "AliFemtoConfigObject.h"
 
 /// \class AliFemtoVertexMultAnalysis
 /// \brief Femtoscopic analysis which mixes events binned by vertices'
@@ -23,6 +24,20 @@
 ///
 class AliFemtoVertexMultAnalysis : public AliFemtoSimpleAnalysis {
 public:
+  /// \class AliFemtoVertexMultAnalysis::Parameters
+  /// \brief Simple POD struct used for constructing class ALiFemtoVertexMultAnalysis
+  struct Parameters {
+    UInt_t vertex_bins;                // {10}
+    std::pair<Double_t, Double_t> vertex_range;  // {-100.0, +100.0}
+    UInt_t mult_bins;                  // {10}
+    std::pair<Double_t, Double_t> mult_range;    // {-1e9, +1e9}
+
+    // configurable
+    Parameters(AliFemtoConfigObject &);
+    operator AliFemtoConfigObject() const;
+  };
+
+public:
 
   /// Construct with parameters for event-mixing bins
   ///
@@ -35,6 +50,12 @@ public:
                              UInt_t binsMult=10,
                              Double_t minMult=-1.0e9,
                              Double_t maxMult=+1.0e9);
+
+  /// Build from Parameters object
+  AliFemtoVertexMultAnalysis(const Parameters&);
+
+  /// Build from Config object
+  AliFemtoVertexMultAnalysis(AliFemtoConfigObject&);
 
   /// Copies the event-mixing binning parameters, creates a new event
   /// collection and resets the overflow & underflow members to 0.
