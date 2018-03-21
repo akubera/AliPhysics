@@ -126,6 +126,7 @@ public:
   ///
   static AliFemtoEventReader* ConstructEventReader(AliFemtoConfigObject cfg);
 
+  static AliFemtoEventCut* ConstructEventCut(AliFemtoConfigObject &);
   static AliFemtoParticleCut* ConstructParticleCut(AliFemtoConfigObject);
   static AliFemtoPairCut* ConstructPairCut(AliFemtoConfigObject);
 

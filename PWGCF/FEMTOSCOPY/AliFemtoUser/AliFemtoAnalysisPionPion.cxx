@@ -336,6 +336,14 @@ AliFemtoAnalysisPionPion::AliFemtoAnalysisPionPion(const char *name,
   ).Data());
 }
 
+AliFemtoAnalysisPionPion::AliFemtoAnalysisPionPion(AliFemtoConfigObject &obj)
+: AliFemtoVertexMultAnalysis(AliFemtoVertexMultAnalysis::Parameters(obj))
+, fAnalysisName(obj.pop("name", "AliFemtoAnalysisPionPion"))
+, fPionType_1(PionType::kPiMinus)
+, fPionType_2(PionTYpe::kPiMinus)
+, fGroupOutputObjects(true)
+{
+}
 
 AliFemtoAnalysisPionPion::AnalysisParams
 AliFemtoAnalysisPionPion::DefaultConfig()
@@ -894,25 +902,25 @@ AliFemtoAnalysisPionPion::ConstructParticleCut(AliFemtoConfigObject cfg)
 
 }
 
-AliFemtoAnalysis*
-AliFemtoAnalysisPionPion::BuildAnalysisFromConfiguration(AliFemtoConfigObject cfg)
-{
-  std::string classname;
-  if (!cfg.pop_and_load("class", classname)) {
-    TString msg = "Could not load string-property 'class' from object:\n" + cfg.Stringify(true);
-    std::cerr << "[AliFemtoAnalysisPionPion::ConstructEventReader] " << msg;
-    return nullptr;
-  }
+// AliFemtoAnalysis*
+// AliFemtoAnalysisPionPion::BuildAnalysisFromConfiguration(AliFemtoConfigObject cfg)
+// {
+//   std::string classname;
+//   if (!cfg.pop_and_load("class", classname)) {
+//     TString msg = "Could not load string-property 'class' from object:\n" + cfg.Stringify(true);
+//     std::cerr << "[AliFemtoAnalysisPionPion::ConstructEventReader] " << msg;
+//     return nullptr;
+//   }
 
-  #define TRY_CONSTRUCTING_CLASS(__name) (classname == #__name) ? (AliFemtoAnalysis*)(Configuration<__name>(cfg))
+//   #define TRY_CONSTRUCTING_CLASS(__name) (classname == #__name) ? (AliFemtoAnalysis*)(Configuration<__name>(cfg))
 
-  AliFemtoAnalysis *result = TRY_CONSTRUCTING_CLASS(AliFemtoAnalysisPionPion)
-                          //  : TRY_CONSTRUCTING_CLASS(AliFemtoEventReaderAODMultSelection)
-                           : nullptr;
-  #undef TRY_CONSTRUCTING_CLASS
+//   AliFemtoAnalysis *result = TRY_CONSTRUCTING_CLASS(AliFemtoAnalysisPionPion)
+//                           //  : TRY_CONSTRUCTING_CLASS(AliFemtoEventReaderAODMultSelection)
+//                            : nullptr;
+//   #undef TRY_CONSTRUCTING_CLASS
 
-  return result;
-}
+//   return result;
+// }
 
 AliFemtoCorrFctn*
 AliFemtoAnalysisPionPion::ConstructCorrelationFunction(AliFemtoConfigObject cfg)
@@ -937,43 +945,43 @@ AliFemtoAnalysisPionPion::ConstructCorrelationFunction(AliFemtoConfigObject cfg)
   return result;
 }
 
-template<>
-struct Configuration<AliFemtoAnalysisPionPion> {
+// template<>
+// struct Configuration<AliFemtoAnalysisPionPion> {
 
-  /// Name of the analysis
-  TString name;
+//   /// Name of the analysis
+//   TString name;
 
-  /// type of pions
-  AliFemtoAnalysisPionPion::PionType type1, type2;
+//   /// type of pions
+//   AliFemtoAnalysisPionPion::PionType type1, type2;
 
-  /// output the settings (no - just use the config, please)
-  bool output_settings = false;
+//   /// output the settings (no - just use the config, please)
+//   bool output_settings = false;
 
-  /// Analysis over montecarlo data
-  bool is_mc_analysis = false;
+//   /// Analysis over montecarlo data
+//   bool is_mc_analysis = false;
 
-  Configuration(AliFemtoConfigObject cfg)
-    : name("_PionPionAnalysis")
-    , type1(kPiPlus)
-    , type2(kPiMinus)
-  {
-    cfg.pop_all()
-      ("name", name)
-      ("pion1", type1)
-      ("pion2", type2)
-      ("is_mc_analysis", is_mc_analysis)
-      .WarnOfRemainingItems();
-  }
+//   Configuration(AliFemtoConfigObject cfg)
+//     : name("_PionPionAnalysis")
+//     , type1(kPiPlus)
+//     , type2(kPiMinus)
+//   {
+//     cfg.pop_all()
+//       ("name", name)
+//       ("pion1", type1)
+//       ("pion2", type2)
+//       ("is_mc_analysis", is_mc_analysis)
+//       .WarnOfRemainingItems();
+//   }
 
-  Configuration(AliFemtoConfigObject cfg):
-    Configuration()
-  {
-  }
+//   Configuration(AliFemtoConfigObject cfg):
+//     Configuration()
+//   {
+//   }
 
-  operator AliFemtoAnalysis*() const {
-    AliFemtoAnalysisPionPion *analysis = new AliFemtoAnalysisPionPion();
-    analysis->SetName(name);
-    // analysis->SetConfig(name);
-    return nullptr;
-  }
-};
+//   operator AliFemtoAnalysis*() const {
+//     AliFemtoAnalysisPionPion *analysis = new AliFemtoAnalysisPionPion();
+//     analysis->SetName(name);
+//     // analysis->SetConfig(name);
+//     return nullptr;
+//   }
+// };
