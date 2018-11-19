@@ -36,10 +36,10 @@
 #include "AliFemtoCorrFctnDirectYlm.h"
 #include "AliFemtoCorrFctnQ3D.h"
 
+#include "AliFemtoModelCorrFctnTrueQ.h"
 #include "AliFemtoModelCorrFctnTrueQ3D.h"
 #include "AliFemtoModelCorrFctnTrueQ3DByParent.h"
 #include "AliFemtoKtBinnedCorrFunc.h"
-#include "AliFemtoModelCorrFctnTrueQ.h"
 
 #include <TROOT.h>
 #include <TBase64.h>
@@ -531,6 +531,26 @@ ConfigFemtoAnalysis(const TString& param_str="")
           kt_detadphi_simple_cfs->AddKtRange(low, high);
         }
         analysis->AddCorrFctn(kt_detadphi_simple_cfs);
+      }
+
+      if (macro_config.do_detadphi_simple_cf) {
+        AliFemtoCorrFctnDEtaDPhiSimple *cf = new AliFemtoCorrFctnDEtaDPhiSimple("", 29, 29);
+        cf->SetReadHiddenInfo(analysis_config.is_mc_analysis);
+        analysis->AddCorrFctn(cf);
+      }
+
+      if (macro_config.do_kt_detadphi_simple_cf) {
+        AliFemtoCorrFctnDEtaDPhiSimple *m_cf = new AliFemtoCorrFctnDEtaDPhiSimple("", 29, 29);
+        m_cf->SetReadHiddenInfo(analysis_config.is_mc_analysis);
+
+        AliFemtoKtBinnedCorrFunc *kt_binned_cfs = new AliFemtoKtBinnedCorrFunc("KT_DetaDphiSimple", m_cf);
+
+        for (size_t kt_idx=0; kt_idx < macro_config.kt_ranges.size(); kt_idx += 2) {
+          float low = macro_config.kt_ranges[kt_idx],
+                high = macro_config.kt_ranges[kt_idx+1];
+          kt_binned_cfs->AddKtRange(low, high);
+        }
+        analysis->AddCorrFctn(kt_binned_cfs);
       }
 
       if (macro_config.do_ylm_cf) {
