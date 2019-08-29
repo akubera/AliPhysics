@@ -27,8 +27,8 @@ public:
   virtual unsigned int UnderflowVertexZ() const { return fUnderFlowVertexZ;}
   virtual unsigned int OverflowMult() const { return fOverFlowMult;}
   virtual unsigned int UnderflowMult() const { return fUnderFlowMult;}
-  double GetCurrentReactionPlane();
-  TVector2 GetQVector(AliFemtoParticleCollection* particlecollection);
+  double GetCurrentReactionPlane() const;
+  TVector2 GetQVector(AliFemtoParticleCollection* particlecollection) const;
   virtual void MakePairs(const char* typeIn, AliFemtoParticleCollection *partCollection1, AliFemtoParticleCollection *partCollection2=0);
   virtual TList* GetOutputList();
 
